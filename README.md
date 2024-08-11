@@ -232,7 +232,7 @@ as traversal is often limited to leaves for data retrieval
 Indexing	Suitable for general indexing needs, including key-value pairs	
 Ideal for indexing where range queries and sorted data access are common
 
-`Code: Learn implementing B tree.`
+    Code: Learn implementing B tree.
 
 ## B++ Tree
 
@@ -263,7 +263,7 @@ More straightforward, as traversal is often limited to leaves for data retrieval
 ### `Indexing`	
 Ideal for indexing where range queries and sorted data access are common
 
-`Code: Learn implementing B++ tree.`
+    Code: Learn implementing B++ tree.
 
 # `Part 5: Distribution`
 ### `Partitioning`
@@ -278,7 +278,7 @@ data each table containing a limited rage amount, for example the first table ma
 reactions with postId 1-10,000,000 next one with next 10 million then 10 and so on. 
 Partitioning makes tables & queries `lighter`, `faster`, `complex`.
 
-`Code: Implement automatic paritioning using Java/Spring and PostgreSQL`
+    Code: Implement automatic paritioning using Java/Spring and PostgreSQL
 
 ### `Sharding`
 Sharding is a different concept of distributing the data in `different databases`. 
@@ -291,7 +291,7 @@ approach alleviates the performance `bottlenecks of a single server` and facilit
 `horizontal scaling`. It also can offer `additional security` based on sharding key. 
 Transaction, schema changes, joins, rollbacks is a real headache because of multiple databases.
 
-`Code: Implement sharding across different databases using Java/Spring and PostgreSQL  `
+    Code: Implement sharding across different databases using Java/Spring and PostgreSQL
 
 ### `Replication`
 Replication is a technique used to enhance the availability and 
@@ -308,7 +308,7 @@ While it `introduces complexity in` managing data `consistency` and `synchroniza
 across multiple servers, replication is crucial for maintaining high availability 
 and scaling read operations in critical applications.
 
-`Code: Implement replication using Postgres and CQRS with it using Java/Spring, utilize connection pulling too`
+    Code: Implement replication using Postgres and CQRS with it using Java/Spring, utilize connection pulling too
 
 
 
