@@ -1,5 +1,5 @@
-## <code style="color : red">The ACID PRINCIPLE</code>
-## Transaction
+# ```The ACID PRINCIPLE```
+## ```Transaction```
 -	Multiple queries treated as a single unit of work.
 -	Transaction lifecycle consists of 4 parts internally: BEGIN, COMMIT 
 (Store in memory/RAM), WRITE (Store in disk).
