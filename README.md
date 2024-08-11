@@ -107,7 +107,7 @@ and all user defined PK is actually SK), other DB allows to create it.
 Time to practice some indexing related queries!
 
 
-```dockerfile
+```bash
 # Run a Postgres docker container with custom password, custom name and latest docker version.
 docker run -e POSTGRES_PASSWORD=postgres --name pg1 postgres;
 
@@ -311,6 +311,60 @@ and scaling read operations in critical applications.
     Code: Implement replication using Postgres and CQRS with it using Java/Spring, utilize connection pulling too
 
 
+# `Part 5: Concurrency`
+### `Shared lock & exclusive lock`
+When `shared lock or read lock` applied on a/some row then it means that we're reading the rows 
+and somebody `must not change or update` things in the middle of the way, whoever others can 
+read and make more shared lock too, but while active no one can acquire an exclusive lock. 
+`Exclusive lock or write lock` on the other hand doesn't allow others to both read and write, it
+locks entirely because it means that I'm writing something everybody should read after I'm done
+otherwise they will get some updated and some old values.
+
+### `Deadlock`
+Deadlock occurs when one thread(a) locks a part(a) and tries to access another part(b) but can't
+because that part is locked by another thread(b) and that thread tries to access(a) and can't
+as it is locked by thread(a), so thread(a) can't fining because of thread(b)'s lock and 
+thread(b) also can't finish because of thread(a).
+
+However in databases, waiting is allowed while locked, but the moment when deadlock starts
+the thread that goes to deadlock second is immediately failed. 
+
+In the below example, the column id is unique, first transaction 1 adds an entry 10 then 
+transaction 2 adds 20, then right when transaction 1 tries to add 20 it starts waiting because
+transaction 2 is working on the row that has id 20 and transaction 2 is still processing. 
+But right when transaction 2 tries to add 10, it also starts waiting for T1 because it is working
+or row 10 and still processing because waiting for T2 who is waiting for T1 who is waiting for T2
+who is waiting for T1..... DEADLOCK! 
+
+Then the DB engine terminates the T2 as it entered deadlock last so all of its changes are 
+rolled back and see in the select query, both row is shown as added by T1. Note that T1 executes
+right when T2 ends doesn't matter it ends normally or by rollback or by failure.
+
+![img_10.png](img_10.png)
+
+### `The two phase problem`
+This is the problem where there are 2 or N same steps being executed by two threads in an 
+ordered manner as a result the thread with last action wins. For example, lets say thread T1 and
+thread T2 clicks to book two ticket at the same time. Both refresh same time so `ticket no 2324` 
+is shown available (booked_by = null in below screenshot). Then both wants to book that ticket
+T1 books it and ends the transaction then T2 books it and ends the transaction. Boom! T1's 
+action is gone! See the below steps in screenshot.
+
+![img_13.png](img_13.png)
+
+Now as a solution to this, we can apply an exclusive lock on `ticket no 2325` from each thread, 
+as shown in the screenshot, the second thread is not getting any result as thread 1's 
+transaction is in progress, after thread 1 is done, thread two will execute the select query 
+and notice that booked_by has a value. And won't attempt to book it.
+
+![img_14.png](img_14.png)
+
+Bellow, though both transactions started at the same time and both T1 and T2 got isBooked = 0 
+then why the second update failed? 
+Because, Postgres by default applies `read commited` and before commiting a transaction it reads values
+again then it found isBooked = 1. This result may differ in different DB engines based on their implementations.
+
+![img_15.png](img_15.png)
 
 
 
