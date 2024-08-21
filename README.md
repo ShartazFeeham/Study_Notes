@@ -395,9 +395,24 @@ add extra level of configurations. Need to find a middle point in-between based 
 `A:` Use SSL, use very long and unpredictable DB password, store the configuration info in some
 vault area which will be utilized by the web server. 
 
-Q: What is Homomorphic encryption? 
-A: We can not just save everything encrypted into database prioritizing security because while 
+`Q:` What is Homomorphic encryption? 
+`A:` We can not just save everything encrypted into database prioritizing security because while 
 querying, we'll need comparison and filter logic to be applied on plain text, can't do those on
 cypher. Homomorphic encryption, introduced by IBM, so-called future of security, actually can
 apply those on a cypher text! Of course, it is not magic, extra level of processing is needed, so 
 it is ridiculously slow yet. That's why it is called ultimate security tech for 'future'.
+
+Q: How UUID is bad? 
+A: 
+
+Q: In composite indexing what orders are best? 
+A: When we're indexing, we don't care about space. We should consider how the B tree may 
+respond quick, so we should put more selective(unique, less-repeat) field on the left. Let's assume
+an index of productId and category, if we put category on left then there will be only a few first
+level nodes each one containing huge amount of second. But using productId will do the reverse 
+and result faster. 
+
+Q: How indexes that are too large for RAM stored in disc and accessed?
+A: 
+
+https://www.qwertee.io/blog/postgresql-b-tree-index-explained-part-1/
