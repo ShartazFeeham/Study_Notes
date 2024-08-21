@@ -366,5 +366,38 @@ again then it found isBooked = 1. This result may differ in different DB engines
 
 ![img_15.png](img_15.png)
 
+# `Part 6: Cursors`
+While a ranged amount of data needed to be processed, the whole operation can be quite lengthy
+and memory consuming, then server gets all. `Cursor` is the solution by which we can 
+`create a stream of data`(Like future in Java), in is ready to be executed, 
+`and we can get records chunk by chunk` from DB storage
+using fetch query. It is quite useful way of sorting a table with huge size data because traditional 
+sorting (Though DB engines do good RAM management still) may use too much RAM. There are two 
+types of cursor: `Server side cursor` (Pros: handled by DB, better for large data, small network 
+traffic, less client RAM, consistent data. Cons: complex, client stays in hold) & `Client side 
+cursor` (Pros: By default this is what we do so no complexity, reduced server load, consistent data 
+because of immediate data access. Cons: huge client memory, huge network traffic)
+
+    Code: Implement server side and client side cursor using Java
 
 
+# `Part 7: Security`
+
+`Q:` Should you use create table if not exist (or ORM based table creation) from the web server? 
+`A:` If I do this, the web server will have full privilege which is bad because the web server has drop
+permission so SQL injection can destroy everything, another problem is what if there is another
+web server that use the same table? There will be imbalance of access. So what I'll do is create
+database independently then make connection pool with specific permissions for the web server. 
+We can even create multiple pools for each web server even for each of the table but that may 
+add extra level of configurations. Need to find a middle point in-between based on business.
+
+`Q:` What is the best way of connecting database from server? 
+`A:` Use SSL, use very long and unpredictable DB password, store the configuration info in some
+vault area which will be utilized by the web server. 
+
+Q: What is Homomorphic encryption? 
+A: We can not just save everything encrypted into database prioritizing security because while 
+querying, we'll need comparison and filter logic to be applied on plain text, can't do those on
+cypher. Homomorphic encryption, introduced by IBM, so-called future of security, actually can
+apply those on a cypher text! Of course, it is not magic, extra level of processing is needed, so 
+it is ridiculously slow yet. That's why it is called ultimate security tech for 'future'.
