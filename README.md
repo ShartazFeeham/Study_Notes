@@ -261,8 +261,6 @@ More straightforward, as traversal is often limited to leaves for data retrieval
 ### `Indexing`	
 Ideal for indexing where range queries and sorted data access are common
 
-    Code: Learn implementing B++ tree.
-
 # `Part 5: Distribution`
 ### `Partitioning`
 Partitioning is `storing` rows (horizontal) or columns (vertical) `in multiple tables 
