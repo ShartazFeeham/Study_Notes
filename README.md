@@ -274,6 +274,9 @@ data each table containing a limited rage amount, for example the first table ma
 reactions with postId 1-10,000,000 next one with next 10 million then 10 and so on. 
 Partitioning makes tables & queries `lighter`, `faster`, `complex`.
 
+    Code: Implement automatic paritioning using Java/Spring and PostgreSQL
+
+
 ### `Sharding`
 Sharding is a different concept of distributing the data in `different databases`. 
 It is needed `when there are so much data that the DB space is struggling`. It is very 
