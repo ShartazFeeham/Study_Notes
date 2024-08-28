@@ -232,8 +232,6 @@ as traversal is often limited to leaves for data retrieval
 Indexing	Suitable for general indexing needs, including key-value pairs	
 Ideal for indexing where range queries and sorted data access are common
 
-    Code: Learn implementing B tree.
-
 ## B++ Tree
 
 ![img_7.png](img_7.png)
@@ -277,8 +275,6 @@ can do is break the table based on id range! There will be multiple tables with 
 data each table containing a limited rage amount, for example the first table may have 
 reactions with postId 1-10,000,000 next one with next 10 million then 10 and so on. 
 Partitioning makes tables & queries `lighter`, `faster`, `complex`.
-
-    Code: Implement automatic paritioning using Java/Spring and PostgreSQL
 
 ### `Sharding`
 Sharding is a different concept of distributing the data in `different databases`. 
