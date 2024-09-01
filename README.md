@@ -17,7 +17,7 @@ transaction, in regular reads, things may get changed in the middle.
 
 **Example of a transaction**
 
-![img_1.png](img_1.png)
+![img_1.png](resources/img_1.png)
 
 
 ## `Atomicity`
@@ -39,7 +39,7 @@ thread 2 updates it, the update of thread 1 is overwritten.)
 
 **Example of dirty read:**
 
-![img_2.png](img_2.png)
+![img_2.png](resources/img_2.png)
 
 Different database uses different isolation levels by default to prevent different 
 reading phenomena.
@@ -84,12 +84,12 @@ Tables are stored in `Heap` DS, traversing Heap is expensive as it gives you all
 pages and requires iterating through everything to find a row. Index is another 
 DS which keeps pointers to heap using B-Tree. Example of reading from index & heap 
 using two IO (imagine finding last row without index!)
-![img_3.png](img_3.png)
+![img_3.png](resources/img_3.png)
 
 Data storing can be both row and `column based`, the above one is example of row based,
 however in column-based storing, only a limited (equals to number of columns) number of rows are created, each row contains all the values for a particular column. Example:
-![img_4.png](img_4.png)
-![img_5.png](img_5.png)
+![img_4.png](resources/img_4.png)
+![img_5.png](resources/img_5.png)
 
 Good for aggregation, good for compression (as multiple record has same value so 
 stored as value as a key with list of record id), very problematic in queries especially 
@@ -187,7 +187,7 @@ query is executed only after it says the data may exist.
 # `Part 4: Indexing data structures`
 ## B Tree 
 
-![img_6.png](img_6.png)
+![img_6.png](resources/img_6.png)
 
 ### `Properties`
 - All leaves are at the same level.
@@ -212,7 +212,7 @@ as all values are in leaf nodes, making range queries faster
 
 ### `Insertions/Deletions`
 Efficient, with minimal re-balancing needed due to its balanced nature 
-Efficient, similar to B-trees, but may involve more rebalancing
+Efficient, similar to B-trees, but may involve more re-balancing
 
 ### `Space Utilization`
 Can be less space-efficient as internal nodes store data
@@ -236,7 +236,7 @@ Ideal for indexing where range queries and sorted data access are common
 
 ## B++ Tree
 
-![img_7.png](img_7.png)
+![img_7.png](resources/img_7.png)
 
 ### `Properties`
 Everything is  same as B Tree except for the value storing mechanism. In B+ tree the intermediate nodes doesn’t store any value, only keeps the keys and the leaf nodes stores values, additionaly the leaf nodes keeps a pointer  to the next node which brings lot of facilites wich such little cost.
@@ -263,7 +263,7 @@ More straightforward, as traversal is often limited to leaves for data retrieval
 ### `Indexing`	
 Ideal for indexing where range queries and sorted data access are common
 
-    Code: Learn implementing B++ tree.
+    Code: Implement indexing using spring and hibernate: https://github.com/feehaam/Postgres_indexing_with_spring_jpa
 
 # `Part 5: Distribution`
 ### `Partitioning`
@@ -278,7 +278,7 @@ data each table containing a limited rage amount, for example the first table ma
 reactions with postId 1-10,000,000 next one with next 10 million then 10 and so on. 
 Partitioning makes tables & queries `lighter`, `faster`, `complex`.
 
-    Code: Implement automatic paritioning using Java/Spring and PostgreSQL
+    Code: Implement paritioning using Java/Spring and PostgreSQL: https://github.com/feehaam/Postgres_partitioning_with_spring_hibernate_jdbc
 
 ### `Sharding`
 Sharding is a different concept of distributing the data in `different databases`. 
@@ -340,7 +340,7 @@ Then the DB engine terminates the T2 as it entered deadlock last so all of its c
 rolled back and see in the select query, both row is shown as added by T1. Note that T1 executes
 right when T2 ends doesn't matter it ends normally or by rollback or by failure.
 
-![img_10.png](img_10.png)
+![img_10.png](resources/img_10.png)
 
 ### `The two phase problem`
 This is the problem where there are 2 or N same steps being executed by two threads in an 
@@ -350,21 +350,21 @@ is shown available (booked_by = null in below screenshot). Then both wants to bo
 T1 books it and ends the transaction then T2 books it and ends the transaction. Boom! T1's 
 action is gone! See the below steps in screenshot.
 
-![img_13.png](img_13.png)
+![img_13.png](resources/img_13.png)
 
 Now as a solution to this, we can apply an exclusive lock on `ticket no 2325` from each thread, 
 as shown in the screenshot, the second thread is not getting any result as thread 1's 
 transaction is in progress, after thread 1 is done, thread two will execute the select query 
 and notice that booked_by has a value. And won't attempt to book it.
 
-![img_14.png](img_14.png)
+![img_14.png](resources/img_14.png)
 
 Bellow, though both transactions started at the same time and both T1 and T2 got isBooked = 0 
 then why the second update failed? 
 Because, Postgres by default applies `read commited` and before commiting a transaction it reads values
 again then it found isBooked = 1. This result may differ in different DB engines based on their implementations.
 
-![img_15.png](img_15.png)
+![img_15.png](resources/img_15.png)
 
 # `Part 6: Cursors`
 While a ranged amount of data needed to be processed, the whole operation can be quite lengthy
@@ -416,3 +416,10 @@ Q: How indexes that are too large for RAM stored in disc and accessed?
 A: 
 
 https://www.qwertee.io/blog/postgresql-b-tree-index-explained-part-1/
+
+Q: What is better, making a column non-null or putting null values or putting dummy value like 0?
+Q: How does postgres determine a record in a row is null?
+Q: Is there can be any difference in select count(*), select count(col_name) in a 
+single column table? If yes then why would!? And when? 
+Q: Why select * from t where c is null gives result but select * from t where c in [null] doesn't?
+Q: Do databases support nulls in the index? 
