@@ -232,8 +232,6 @@ as traversal is often limited to leaves for data retrieval
 Indexing	Suitable for general indexing needs, including key-value pairs	
 Ideal for indexing where range queries and sorted data access are common
 
-    Code: Learn implementing B tree.
-
 ## B++ Tree
 
 ![img_7.png](resources/img_7.png)
@@ -279,6 +277,7 @@ reactions with postId 1-10,000,000 next one with next 10 million then 10 and so 
 Partitioning makes tables & queries `lighter`, `faster`, `complex`.
 
     Code: Implement paritioning using Java/Spring and PostgreSQL: https://github.com/feehaam/Postgres_partitioning_with_spring_hibernate_jdbc
+
 
 ### `Sharding`
 Sharding is a different concept of distributing the data in `different databases`. 
@@ -415,11 +414,12 @@ and result faster.
 Q: How indexes that are too large for RAM stored in disc and accessed?
 A: 
 
-https://www.qwertee.io/blog/postgresql-b-tree-index-explained-part-1/
-
 Q: What is better, making a column non-null or putting null values or putting dummy value like 0?
 Q: How does postgres determine a record in a row is null?
 Q: Is there can be any difference in select count(*), select count(col_name) in a 
 single column table? If yes then why would!? And when? 
 Q: Why select * from t where c is null gives result but select * from t where c in [null] doesn't?
 Q: Do databases support nulls in the index? 
+
+
+https://www.qwertee.io/blog/postgresql-b-tree-index-explained-part-1/
