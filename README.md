@@ -290,7 +290,7 @@ approach alleviates the performance `bottlenecks of a single server` and facilit
 `horizontal scaling`. It also can offer `additional security` based on sharding key. 
 Transaction, schema changes, joins, rollbacks is a real headache because of multiple databases.
 
-    Code: Implement sharding across different databases using Java/Spring and PostgreSQL
+    Code: Implement sharding across different databases using Java/Spring and PostgreSQL: https://github.com/feehaam/Sharding_across_multi-DB_with_spring_postgres_mySql
 
 ### `Replication`
 Replication is a technique used to enhance the availability and 
