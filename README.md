@@ -261,7 +261,7 @@ More straightforward, as traversal is often limited to leaves for data retrieval
 ### `Indexing`	
 Ideal for indexing where range queries and sorted data access are common
 
-    Code: Implement indexing using spring and hibernate: https://github.com/feehaam/Postgres_indexing_with_spring_jpa
+    Code: Implement indexing & connection pulling using spring and hibernate: https://github.com/feehaam/Postgres_indexing_with_spring_jpa
 
 # `Part 5: Distribution`
 ### `Partitioning`
@@ -306,8 +306,6 @@ and backup strategies by keeping up-to-date copies of data in different location
 While it `introduces complexity in` managing data `consistency` and `synchronization` 
 across multiple servers, replication is crucial for maintaining high availability 
 and scaling read operations in critical applications.
-
-    Code: Implement replication using Postgres and CQRS with it using Java/Spring, utilize connection pulling too
 
 
 # `Part 5: Concurrency`
@@ -376,8 +374,6 @@ types of cursor: `Server side cursor` (Pros: handled by DB, better for large dat
 traffic, less client RAM, consistent data. Cons: complex, client stays in hold) & `Client side 
 cursor` (Pros: By default this is what we do so no complexity, reduced server load, consistent data 
 because of immediate data access. Cons: huge client memory, huge network traffic)
-
-    Code: Implement server side and client side cursor using Java
 
 
 # `Part 7: Security`
