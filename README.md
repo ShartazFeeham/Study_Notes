@@ -375,47 +375,109 @@ traffic, less client RAM, consistent data. Cons: complex, client stays in hold) 
 cursor` (Pros: By default this is what we do so no complexity, reduced server load, consistent data 
 because of immediate data access. Cons: huge client memory, huge network traffic)
 
+#### `Q` How do you develop and enforce database confidentiality policies?
+`A` By assessing data sensitivity, defining access controls, and implementing layers of security such as encryption and user authentication. Enforcing these policies involves regular audits, updating security protocols as per compliance standards, and training users on data privacy practices.
 
-# `Part 7: Security`
+#### `Q` How do you approach debugging an entire system of applications?
+`A` My approach involves isolating the subsystems and using a combination of logging, breakpoints, and unit tests to identify the source of the error. I prioritize sections based on the error impact and dependencies, ensuring a systematic examination from the database up through the user interface.
 
-`Q:` Should you use create table if not exist (or ORM based table creation) from the web server? 
-`A:` If I do this, the web server will have full privilege which is bad because the web server has drop
+#### `Q` When would you consider a NoSQL design over an SQL design?
+`A` I consider NoSQL design when the application requires high scalability, flexibility to handle unstructured or semi-structured data, and rapid development cycles where schema changes are frequent and varied.
+
+#### `Q` How do you know when to follow "procedural" logic?
+`A` Procedural logic is suited to tasks that involve sequential steps, such as data processing routines, complex calculations, and detailed instructions that must be executed in a specific order. It’s particularly useful when exact procedures must be followed to achieve the desired outcomes, ensuring precision and control over program flow.
+
+#### `Q` What do you understand about BCNF?
+`A` BCNF refers to the Boyce Codd Normal Form, an advanced version of the third normal form that does not feature overlapping candidate keys.
+
+#### `Q` What do you understand by database testing?
+`A` a) Testing of data integrity and validity. b) Performance of database. c) Testing of procedure, functions, and triggers
+
+#### `Q` What are indexes and their different types?
+`A` Indexes are data structures that improve the speed of data retrieval operations within a database table at the cost of additional writes and storage space to maintain the index data structure.
+- Primary Index: Index using the primary key.
+- Unique Index: This index does not allow the field to have duplicate values if the column is unique indexed.
+- Secondary Index / Non-unique index: Unlike the primary index, a secondary index may not be based on a unique key, and multiple entries can have the same key. It is used to access data in sequential order, but using non-primary keys.
+- Composite Index: Also known as a concatenated index, involves multiple columns. Composite indexes can be particularly useful for queries that test all the columns in the index, or prefix the columns.
+- Clustered Index: In a clustered index, the order of the physical data records on the disk is the same as the index order. There can be only one clustered index per table because data rows themselves can be stored in only one order. The primary key of a table is a great candidate for a clustered index.
+- Bitmap Index: Bitmap indexes are typically used for columns with low cardinality, which means the column has a very few unique values. They use bitmaps (arrays of binary digits) to represent the existence of data values, making it highly efficient for indexing columns with Boolean values or null status.
+- Partial Index: Also known as a filtered index, it only indexes a subset of the data in a table.
+- Full-text Index: Used on columns holding large strings or documents, full-text indexes allow for the searching of words or phrases within the strings. This type of indexing is common in applications handling large textual data like logs, documents, and descriptions allowing complex search queries.
+- Covering Index: A covering index includes all the columns needed for a query to be processed. Essentially, it "covers" the query.
+
+
+#### `Q` Question?
+`A` Answer
+
+#### `Q` Question?
+`A` Answer
+
+#### `Q` Question?
+`A` Answer
+
+#### `Q` Question?
+`A` Answer
+
+#### `Q` Question?
+`A` Answer
+
+#### `Q` Question?
+`A` Answer
+
+#### `Q` Question?
+`A` Answer
+
+#### `Q` Question?
+`A` Answer
+
+#### `Q` Question?
+`A` Answer
+
+#### `Q` Question?
+`A` Answer
+
+
+
+
+#### `Q`Should you use create table if not exist (or ORM based table creation) from the web server?
+`A` If I do this, the web server will have full privilege which is bad because the web server has drop
 permission so SQL injection can destroy everything, another problem is what if there is another
 web server that use the same table? There will be imbalance of access. So what I'll do is create
-database independently then make connection pool with specific permissions for the web server. 
-We can even create multiple pools for each web server even for each of the table but that may 
+database independently then make connection pool with specific permissions for the web server.
+We can even create multiple pools for each web server even for each of the table but that may
 add extra level of configurations. Need to find a middle point in-between based on business.
 
-`Q:` What is the best way of connecting database from server? 
-`A:` Use SSL, use very long and unpredictable DB password, store the configuration info in some
-vault area which will be utilized by the web server. 
+#### `Q` What is the best way of connecting database from server?
+`A` Use SSL, use very long and unpredictable DB password, store the configuration info in some
+vault area which will be utilized by the web server.
 
-`Q:` What is Homomorphic encryption? 
-`A:` We can not just save everything encrypted into database prioritizing security because while 
+#### `Q` What is Homomorphic encryption?
+`A` We can not just save everything encrypted into database prioritizing security because while
 querying, we'll need comparison and filter logic to be applied on plain text, can't do those on
 cypher. Homomorphic encryption, introduced by IBM, so-called future of security, actually can
-apply those on a cypher text! Of course, it is not magic, extra level of processing is needed, so 
+apply those on a cypher text! Of course, it is not magic, extra level of processing is needed, so
 it is ridiculously slow yet. That's why it is called ultimate security tech for 'future'.
 
-Q: How UUID is bad? 
-A: 
+#### `Q` How UUID is bad?
+`A`
 
-Q: In composite indexing what orders are best? 
-A: When we're indexing, we don't care about space. We should consider how the B tree may 
+#### `Q` In composite indexing what orders are best?
+`A` When we're indexing, we don't care about space. We should consider how the B tree may
 respond quick, so we should put more selective(unique, less-repeat) field on the left. Let's assume
 an index of productId and category, if we put category on left then there will be only a few first
-level nodes each one containing huge amount of second. But using productId will do the reverse 
-and result faster. 
+level nodes each one containing huge amount of second. But using productId will do the reverse
+and result faster.
 
-Q: How indexes that are too large for RAM stored in disc and accessed?
-A: 
+#### `Q` How indexes that are too large for RAM stored in disc and accessed?
+`A`
+#### `Q` What is better, making a column non-null or putting null values or putting dummy value like 0?
+`A`
+#### `Q` How does postgres determine a record in a row is null?
+`A`
+#### `Q` Is there can be any difference in select count(*), select count(col_name) in a single column table? If yes then why would!? And when?
+`A`
+#### `Q` Why select * from t where c is null gives result but select * from t where c in [null] doesn't?
+`A`
+#### `Q` Do databases support nulls in the index?
+`A` 
 
-Q: What is better, making a column non-null or putting null values or putting dummy value like 0?
-Q: How does postgres determine a record in a row is null?
-Q: Is there can be any difference in select count(*), select count(col_name) in a 
-single column table? If yes then why would!? And when? 
-Q: Why select * from t where c is null gives result but select * from t where c in [null] doesn't?
-Q: Do databases support nulls in the index? 
-
-
-https://www.qwertee.io/blog/postgresql-b-tree-index-explained-part-1/
