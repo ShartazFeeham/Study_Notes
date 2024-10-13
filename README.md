@@ -405,24 +405,73 @@ because of immediate data access. Cons: huge client memory, huge network traffic
 - Full-text Index: Used on columns holding large strings or documents, full-text indexes allow for the searching of words or phrases within the strings. This type of indexing is common in applications handling large textual data like logs, documents, and descriptions allowing complex search queries.
 - Covering Index: A covering index includes all the columns needed for a query to be processed. Essentially, it "covers" the query.
 
+#### `Q` How does Spring Boot support transactions? Describe how you would configure and use transactions in a Spring Boot application.?
+`A` Spring Boot supports transactions through the @Transactional annotation. `@Transactional` can be applied to both classes and methods. When applied to a class, every public method of the class will be transactional. It manages transaction boundaries, start, commit, and rollback.
 
-#### `Q` Question?
-`A` Answer
+#### `Q` Describe what happens if an exception is thrown in a method annotated with `@Transactional`. How does Spring handle the transaction in this case??
+`A` By default, Spring rolls back the transaction if an unchecked exception (e.g., a subclass of RuntimeException) is thrown. Checked exceptions do not trigger a rollback unless explicitly specified.
 
-#### `Q` Question?
-`A` Answer
+#### `Q` What is transaction propagation, and what are some of the propagation behaviors available in Spring? Provide examples of when you might use different propagation levels.?
+`A` Transaction propagation in Spring defines how transactions relate to one another, particularly when a method is called within an existing transaction context. Here are the different propagation behaviors available in Spring: 
+- `PROPAGATION_REQUIRED`: Joins the existing transaction if one exists; otherwise, it starts a new transaction. This is the most common propagation and is used when you want to ensure that all operations occur within a single transaction context. For instance, updating multiple related records where atomicity is necessary.
+- `PROPAGATION_REQUIRES_NEW`: Gets out of the current transaction (if any) and starts a new transaction. Useful when you need the called method to run in its independent transaction. For example, logging an audit trail or updating a logging table, which should always commit even if the main transaction fails. 
+- `PROPAGATION_SUPPORTS`: Joins the existing transaction if one exists; otherwise, it proceeds without a transaction. Ideal for read-only operations that can execute with or without a transaction. Specially data that doesn't change frequently.
+- `PROPAGATION_NOT_SUPPORTED`: Suspends the existing transaction, if one exists, and executes the method non-transactional.Used when a certain operation must not run within a transaction context, such as performing time-consuming operations like data exporting.
+- `PROPAGATION_NEVER`: Executes non-transactional and throws an exception if an existing transaction is present. Similar use cases like previous one.
+- `PROPAGATION_MANDATORY`: Joins the existing transaction; throws an exception if no transaction is present. This is used when an operation absolutely requires an existing transaction, such as operations that must be part of a composite larger transaction initiated elsewhere.
+- `PROPAGATION_NESTED`: Executes within a nested transaction if a current transaction exists; otherwise, it behaves like PROPAGATION_REQUIRED. Ideal for scenarios where you need rollback capabilities at a finer granularity than the main transaction scope allows. For example, processing a bulk operation where each item process should roll back independently if it fails, without affecting the overall bulk transaction.
 
-#### `Q` Question?
-`A` Answer
+#### `Q` How does Spring Boot handle transaction isolation levels? Explain the different isolation levels and their impact on database transactions.?
+`A` Spring Boot allows setting transaction isolation levels through the `@Transactional` annotation. Common levels include `READ_UNCOMMITTED`, `READ_COMMITTED`, `REPEATABLE_READ`, and `SERIALIZABLE`, each providing different balances of consistency and concurrency.
+- `READ_UNCOMMITTED`: Allows a transaction to read uncommitted changes made by other transactions, leading to "dirty reads." Rarely used in practice due to reliability issues but might be applicable for read-intensive applications where performance is more critical than data accuracy. Impact: High concurrency but with risks of reading inconsistent data.
+- `READ_COMMITTED`: Only read data committed by other transactions, preventing dirty reads. Commonly used in production environments where a balance between data consistency and performance is needed. Impact: Prevents dirty reads but phantoms and non-repeatable reads can still occur.
+- `REPEATABLE_READ`: Ensures that if a transaction reads a row, subsequent reads will return the same data, preventing non-repeatable reads but not phantoms. Suitable for applications needing consistent reads within a transaction, like generating reports or invoices.
+- `SERIALIZABLE`: Transactions are completely isolated from each other, locking both read and write operations to prevent any concurrent access issues. Used in scenarios where absolute consistency is critical, such as financial applications where precise balances must be maintained.
 
-#### `Q` Question?
-`A` Answer
+#### `Q` Can you have a transaction that involves multiple databases in Spring Boot? How would you manage such a transaction??
+`A` Yes, through XA transactions or distributed transaction managers, you can manage transactions across multiple data sources by using JTA (Java Transaction API).
 
-#### `Q` Question?
-`A` Answer
+#### `Q` What are some potential pitfalls or common mistakes when using transactions in Spring Boot applications??
+`A` Common pitfalls include not handling exceptions correctly for transaction rollback, 
+misunderstanding transaction isolation level impacts, or all methods in a class not being 
+public, which can prevent @Transactional from working effectively.
 
-#### `Q` Question?
-`A` Answer
+Read more on @Transaction pitfalls: 
+- https://www.linkedin.com/pulse/understanding-springsvtransactional-tips-best-aleksei-gavrilichev-roclf/
+- https://dzone.com/articles/spring-transactional-and-private-methods-snippet
+- https://medium.com/@safa_ertekin/common-transaction-propagation-pitfalls-in-spring-framework-2378ee7d6521
+
+Why these issues happens? Well, Spring AOP works by creating a proxy around the bean. By default, this proxy intercepts calls to public methods to apply the transactional behavior defined by @Transactional.
+Only public methods are intercepted when using proxy-based AOP. Calls to private, protected, or package-private methods from outside the class will not be intercepted by the proxy, which means that @Transactional annotations on these methods won't have any effect.
+If a transactional method makes an internal call to another method within the same class, and this method is not public (or not explicitly transactional when called externally), that call will not be intercepted by the proxy. As a result, the transaction management behavior, such as starting a new transaction, joining an existing one, or rolling back, will not be applied.
+For transactions to work, methods need to be public and accessed externally — typically through another transactional method or service layer.
+
+#### `Q` Explain the concept of optimistic and pessimistic locking. How can they be implemented in a Spring Boot application to handle concurrent transactions??
+`A` Optimistic Locking: Uses versioning to check if the data changed between transactions, typically implemented using a version column in the entity.
+Pessimistic Locking: Locks the data at the row level until the transaction completes; this can be implemented by setting lock modes in JPA queries, e.g., @Lock(LockModeType.PESSIMISTIC_WRITE).
+
+#### `Q` What if DB crash during a commit?
+`A` Write ahead log and recovery procedures are applied to complete or rollback the commit. 
+
+#### `Q` Why read only transactions are used?
+`A` A read-only transaction ensures a consistent snapshot of the data without allowing modifications, optimizing for performance and isolation, while a regular read might not guarantee the same isolation or consistency.
+A read-only transaction ensures consistency by locking in a stable snapshot of the database at the start of the transaction, regardless of ongoing updates, thus preventing it from seeing partial changes from other operations.
+
+#### `Q` How costly is read only lock/snapshot?
+`A` For read-only transactions, the "lock" is generally not a traditional lock that blocks writes; instead, it's often more of a logical isolation mechanism like a snapshot that doesn't interfere significantly with write operations.
+Therefore, the cost is usually minimal in terms of locking overhead, primarily impacting resource usage for maintaining the snapshot.
+In systems that use Multi version Concurrency Control (MVCC), this approach allows high read concurrency with minimal locking impact.
+
+#### `Q` Mention some pros and cons of MVCC?
+`A` `Pros:` Multi version concurrency control allows version of data ensuring readers without locking or blocking another write or read, it also reduces dead locks.
+`Cons:` Increased storage needs, complex garbage collection, more space for storing & more CPU for complex write, garbage collection and read algorithms.
+Note that, all common SQL databases use MVCC. Some NoSQL databases like MongoDB and Cassandra have their tailored concurrency control methods, which might share characteristics with MVCC but aren't strictly MVCC.
+
+#### `Q` Question: Explain the difference between @Transactional and using TransactionTemplate?
+`A` @Transactional supports declarative transaction management through annotations, allowing transaction management to be separated from business code. TransactionTemplate provides programmatic transaction management, where transactions are manually controlled in code, offering more precise transaction boundary control in complex scenarios.
+
+#### `Q` What is the default isolation level in Spring if not specified??
+`A` If not specified, Spring uses the default isolation level of the underlying database, which is typically READ_COMMITTED.
 
 #### `Q` Question?
 `A` Answer
