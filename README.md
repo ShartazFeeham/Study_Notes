@@ -387,6 +387,143 @@ because of immediate data access. Cons: huge client memory, huge network traffic
 #### `Q` What do you understand by database testing?
 `A` a) Testing of data integrity and validity. b) Performance of database. c) Testing of procedure, functions, and triggers
 
+
+
+
+
+
+
+## `Atomicity`
+#### `Q` How does a database manage atomicity in case of system failures?
+`A` Databases manage atomicity using transaction logs. If a system fails in the middle of a transaction, the database can use the log to roll back any partial changes made by the transaction to ensure it is either fully completed or fully undone.
+
+#### `Q` What are transaction logs, and how are they related to atomicity?
+`A` Transaction logs are records of all changes made during transaction processing. They are crucial for atomicity as they allow the database to roll back changes to maintain consistency if a transaction fails.
+
+#### `Q` Is it possible to achieve atomicity across multiple databases? How?
+`A` Yes, atomicity across multiple databases can be achieved through distributed transaction protocols such as the two-phase commit or three-phase commit protocols.
+
+#### `Q` How do microservices architectures handle atomicity?
+`A` In microservices architectures, atomicity is often handled using distributed transactions, compensating transactions, or relying on eventual consistency and domain-driven design patterns to ensure logically atomic operations.
+
+#### `Q` What is the two-phase commit protocol and how does it relate to atomicity?
+`A` The two-phase commit protocol is a method of ensuring atomicity across distributed systems or databases. It ensures that all parts of the transaction commit only if all involved parties agree, or all rollback if any party disagrees.
+
+#### `Q` How does an atomic transaction impact database performance?
+`A` While atomic transactions ensure data consistency and integrity, they may lead to performance overhead due to the need for locking resources and logging to manage the rollback process.
+
+#### `Q` Can you explain the importance of rollback in maintaining atomicity?
+`A` Rollback is crucial for maintaining atomicity as it allows the database to undo any operations of a transaction that cannot be completed fully, thus ensuring that no partial transactions are committed.
+
+#### `Q` How do atomicity and error handling relate in DBMS?
+`A` Atomicity ensures that any errors occurring during a transaction do not affect the database state by guaranteeing the transaction is either fully committed if successful or fully rolled back in the case of an error, maintaining data integrity and consistency.
+
+
+
+
+
+
+## `Consistency`
+#### `Q` Define consistency in the context of databases.
+`A` Consistency in databases refers to ensuring that all data follows defined rules and constraints, such as database schema, 
+and foreign key constraints. It ensures the data is accurate and reliable post any transaction and all related data is synced.
+
+#### `Q` What mechanisms do databases implement to ensure consistency?
+`A` Databases use constraints (primary key, foreign key, not null, unique), triggers, and transaction controls to maintain consistency.
+
+#### `Q` How does a database enforce foreign key constraints to maintain consistency?
+`A` Databases enforce foreign key constraints by preventing operations that would lead to invalid data references, such as deletions or modifications that violate the integrity of the links between tables.
+
+#### `Q` Provide an example of a situation where database consistency might be at risk and how it is protected.
+`A` During simultaneous updates on the same data by multiple transactions, database locks are used to serialize these transactions, ensuring that each transaction's changes are isolated from others, thereby maintaining consistency.
+
+#### `Q` Explain the difference between transaction consistency and database consistency.
+`A` Transaction consistency refers to maintaining a proper state during the execution of a single transaction, whereas database consistency refers to the correctness and adherence to constraints across the entire database.
+
+#### `Q` How do decentralized databases maintain consistency?
+`A` Decentralized databases maintain consistency using consensus algorithms like Paxos or Raft, which ensure that all nodes in the system agree on the current state of the data, despite the possibility of node failures or network partitions.
+
+#### `Q` State CAP theorem.
+`A` The consistency & availability of data can not be ensured at once, guarantee of one will lead to lack of another. 
+
+
+
+
+
+## `Isolation`
+#### `Q` What is the role of isolation in databases?
+`A` Isolation ensures that transactions are securely and independently processed without interference, even when multiple transactions occur concurrently.
+
+#### `Q` Describe a scenario where poor isolation levels can affect a system's performance or integrity.
+`A` Lower levels of isolation, like Read Committed, can allow phenomena such as non-repeatable reads or phantom reads, affecting the accuracy of data reporting and analysis.
+
+#### `Q` How do isolation levels affect database performance and concurrency?
+`A` Higher isolation levels, like Serializable, prevent concurrency errors but can lead to decreased system performance due to increased locking and blocking. Lower levels increase performance but at the risk of introducing anomalies.
+
+#### `Q` What are phantom reads and which isolation level prevents them?
+`A` Phantom reads occur when a transaction reads a row in a table, and a subsequent read within the same transaction sees rows that were inserted/deleted by another transaction. Serializable level prevents them.
+
+#### `Q` Explain the concept of "dirty read" and how it is controlled.
+`A` A dirty read occurs when a transaction reads data another transaction has not yet committed, potentially leading to data inaccuracies. It's controlled by setting an appropriate isolation level, such as Read Committed.
+
+#### `Q` What is snapshot isolation, and how does it work?
+`A` Snapshot isolation allows a transaction to operate on a consistent snapshot of the database, taken at the start of the transaction, to avoid being affected by concurrent modifications, thereby reducing locking needs and improving concurrency.
+
+#### `Q` Explain the difference between read committed and serializable isolation levels.
+`A` Read committed ensures that only committed data is read, preventing dirty reads, whereas serializable is the strictest level, preventing not only dirty reads but also non-repeatable reads and phantom reads by serializing the execution of transactions.
+
+#### `Q` What are write skews, and under which isolation level can they occur?
+`A` Write skews are a form of anomaly where two transactions read overlapping data, see no conflicts, and then update parts of the data leading to inconsistent results. They can occur under Snapshot Isolation or lower levels but not under Serializable.
+
+#### `Q` What is lock escalation, and how does it affect database performance and isolation?
+`A` Lock escalation is the process of converting many fine-grain locks (like row-level locks) into fewer coarse-grain locks (like table-level locks). While this can reduce memory overhead and improve performance, it might decrease concurrency and isolation.
+
+#### `Q` How can one prevent deadlocks in a database system?
+`A` Preventing deadlocks can be managed by ensuring transactions acquire locks in a consistent order, implementing timeout policies where transactions automatically rollback if they cannot obtain a lock, or using deadlock detection algorithms that rollback one of the transactions involved.
+
+#### `Q` Explain how database replication factors into maintaining isolation.
+`A` Replication can complicate maintaining isolation as the same data might be read and written concurrently across multiple copies. Ensuring that all replicas are synchronized and that write operations are propagated correctly is essential to maintain isolation.
+
+
+
+
+
+
+
+## `Durability`
+#### `Q` What does durability mean in a database system?
+`A` Durability guarantees that once a transaction has been committed, it remains so, even in the event of a crash, power loss, or other system failures.
+
+#### `Q` How do database systems ensure data durability?
+`A` Database systems use transaction logs that record all changes. These logs are used to recover committed transactions if the database crashes, thus ensuring durability.
+
+#### `Q` What role do non-volatile memory storages play in ensuring data durability?
+`A` Non-volatile memory, such as SSDs or magnetic disks, ensures that data is not lost when the device is powered off, maintaining the durability of the data stored on them.
+
+#### `Q` How does a database handle durability during a system upgrade?
+`A` During system upgrades, databases ensure durability by performing all pending transactions, backing up data, and maintaining comprehensive logs that can be used for recovery if an update failure occurs.
+
+#### `Q` Can durability be compromised, and how can one mitigate such risks?
+`A` Durability can be compromised in scenarios involving disk failures or data corruption. Regular backups, RAID configurations, and redundant system setups can mitigate such risks, ensuring data is not lost permanently.
+
+#### `Q` How do databases use write-ahead logging (WAL) to ensure durability?
+`A` Write-ahead logging involves writing changes to a log before the actual data pages are written to disk. This ensures that in case of a crash, the database can recover by replaying the log entries, preserving the durability of transactions.
+
+#### `Q` What is the role of the redo log in a database system?
+`A` The redo log records all changes made to the database as part of the transaction log. It is used during recovery operations to redo, or reapply, all actions of transactions that had committed but whose changes had not yet been fully written to disk.
+
+#### `Q` How does a database's cache mechanism impact durability?
+`A` While caching improves performance by reducing disk I/O, it can pose risks to durability if not properly managed, since data in cache is usually not written to disk immediately. Ensuring that cached data is periodically flushed to disk and using transaction logs can mitigate these risks.
+
+#### `Q` Describe the trade-offs involved in improving database durability versus enhancing performance.
+`A` Improving durability often involves additional disk I/O operations, logging, replication, and other resource-intensive activities that can detract from performance. Balancing these aspects involves optimizing how data is logged and replicated, and choosing the right hardware and technology strategies to meet both durability and performance needs effectively.
+
+
+
+
+
+
+
 ## `Transaction`
 #### `Q` How does Spring Boot support transactions? Describe how you would configure and use transactions in a Spring Boot application.?
 `A` Spring Boot supports transactions through the @Transactional annotation. `@Transactional` can be applied to both classes and methods. When applied to a class, every public method of the class will be transactional. It manages transaction boundaries, start, commit, and rollback.
