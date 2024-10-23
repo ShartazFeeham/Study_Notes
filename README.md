@@ -375,17 +375,11 @@ traffic, less client RAM, consistent data. Cons: complex, client stays in hold) 
 cursor` (Pros: By default this is what we do so no complexity, reduced server load, consistent data 
 because of immediate data access. Cons: huge client memory, huge network traffic)
 
-#### `Q` How do you develop and enforce database confidentiality policies?
-`A` By assessing data sensitivity, defining access controls, and implementing layers of security such as encryption and user authentication. Enforcing these policies involves regular audits, updating security protocols as per compliance standards, and training users on data privacy practices.
+# `Interview questions`
 
-#### `Q` How do you approach debugging an entire system of applications?
-`A` My approach involves isolating the subsystems and using a combination of logging, breakpoints, and unit tests to identify the source of the error. I prioritize sections based on the error impact and dependencies, ensuring a systematic examination from the database up through the user interface.
-
+## `Basic`
 #### `Q` When would you consider a NoSQL design over an SQL design?
 `A` I consider NoSQL design when the application requires high scalability, flexibility to handle unstructured or semi-structured data, and rapid development cycles where schema changes are frequent and varied.
-
-#### `Q` How do you know when to follow "procedural" logic?
-`A` Procedural logic is suited to tasks that involve sequential steps, such as data processing routines, complex calculations, and detailed instructions that must be executed in a specific order. It’s particularly useful when exact procedures must be followed to achieve the desired outcomes, ensuring precision and control over program flow.
 
 #### `Q` What do you understand about BCNF?
 `A` BCNF refers to the Boyce Codd Normal Form, an advanced version of the third normal form that does not feature overlapping candidate keys.
@@ -393,18 +387,7 @@ because of immediate data access. Cons: huge client memory, huge network traffic
 #### `Q` What do you understand by database testing?
 `A` a) Testing of data integrity and validity. b) Performance of database. c) Testing of procedure, functions, and triggers
 
-#### `Q` What are indexes and their different types?
-`A` Indexes are data structures that improve the speed of data retrieval operations within a database table at the cost of additional writes and storage space to maintain the index data structure.
-- Primary Index: Index using the primary key.
-- Unique Index: This index does not allow the field to have duplicate values if the column is unique indexed.
-- Secondary Index / Non-unique index: Unlike the primary index, a secondary index may not be based on a unique key, and multiple entries can have the same key. It is used to access data in sequential order, but using non-primary keys.
-- Composite Index: Also known as a concatenated index, involves multiple columns. Composite indexes can be particularly useful for queries that test all the columns in the index, or prefix the columns.
-- Clustered Index: In a clustered index, the order of the physical data records on the disk is the same as the index order. There can be only one clustered index per table because data rows themselves can be stored in only one order. The primary key of a table is a great candidate for a clustered index.
-- Bitmap Index: Bitmap indexes are typically used for columns with low cardinality, which means the column has a very few unique values. They use bitmaps (arrays of binary digits) to represent the existence of data values, making it highly efficient for indexing columns with Boolean values or null status.
-- Partial Index: Also known as a filtered index, it only indexes a subset of the data in a table.
-- Full-text Index: Used on columns holding large strings or documents, full-text indexes allow for the searching of words or phrases within the strings. This type of indexing is common in applications handling large textual data like logs, documents, and descriptions allowing complex search queries.
-- Covering Index: A covering index includes all the columns needed for a query to be processed. Essentially, it "covers" the query.
-
+## `Transaction`
 #### `Q` How does Spring Boot support transactions? Describe how you would configure and use transactions in a Spring Boot application.?
 `A` Spring Boot supports transactions through the @Transactional annotation. `@Transactional` can be applied to both classes and methods. When applied to a class, every public method of the class will be transactional. It manages transaction boundaries, start, commit, and rollback.
 
@@ -412,9 +395,9 @@ because of immediate data access. Cons: huge client memory, huge network traffic
 `A` By default, Spring rolls back the transaction if an unchecked exception (e.g., a subclass of RuntimeException) is thrown. Checked exceptions do not trigger a rollback unless explicitly specified.
 
 #### `Q` What is transaction propagation, and what are some of the propagation behaviors available in Spring? Provide examples of when you might use different propagation levels.?
-`A` Transaction propagation in Spring defines how transactions relate to one another, particularly when a method is called within an existing transaction context. Here are the different propagation behaviors available in Spring: 
+`A` Transaction propagation in Spring defines how transactions relate to one another, particularly when a method is called within an existing transaction context. Here are the different propagation behaviors available in Spring:
 - `PROPAGATION_REQUIRED`: Joins the existing transaction if one exists; otherwise, it starts a new transaction. This is the most common propagation and is used when you want to ensure that all operations occur within a single transaction context. For instance, updating multiple related records where atomicity is necessary.
-- `PROPAGATION_REQUIRES_NEW`: Gets out of the current transaction (if any) and starts a new transaction. Useful when you need the called method to run in its independent transaction. For example, logging an audit trail or updating a logging table, which should always commit even if the main transaction fails. 
+- `PROPAGATION_REQUIRES_NEW`: Gets out of the current transaction (if any) and starts a new transaction. Useful when you need the called method to run in its independent transaction. For example, logging an audit trail or updating a logging table, which should always commit even if the main transaction fails.
 - `PROPAGATION_SUPPORTS`: Joins the existing transaction if one exists; otherwise, it proceeds without a transaction. Ideal for read-only operations that can execute with or without a transaction. Specially data that doesn't change frequently.
 - `PROPAGATION_NOT_SUPPORTED`: Suspends the existing transaction, if one exists, and executes the method non-transactional.Used when a certain operation must not run within a transaction context, such as performing time-consuming operations like data exporting.
 - `PROPAGATION_NEVER`: Executes non-transactional and throws an exception if an existing transaction is present. Similar use cases like previous one.
@@ -432,11 +415,11 @@ because of immediate data access. Cons: huge client memory, huge network traffic
 `A` Yes, through XA transactions or distributed transaction managers, you can manage transactions across multiple data sources by using JTA (Java Transaction API).
 
 #### `Q` What are some potential pitfalls or common mistakes when using transactions in Spring Boot applications??
-`A` Common pitfalls include not handling exceptions correctly for transaction rollback, 
-misunderstanding transaction isolation level impacts, or all methods in a class not being 
+`A` Common pitfalls include not handling exceptions correctly for transaction rollback,
+misunderstanding transaction isolation level impacts, or all methods in a class not being
 public, which can prevent @Transactional from working effectively.
 
-Read more on @Transaction pitfalls: 
+Read more on @Transaction pitfalls:
 - https://www.linkedin.com/pulse/understanding-springsvtransactional-tips-best-aleksei-gavrilichev-roclf/
 - https://dzone.com/articles/spring-transactional-and-private-methods-snippet
 - https://medium.com/@safa_ertekin/common-transaction-propagation-pitfalls-in-spring-framework-2378ee7d6521
@@ -446,12 +429,8 @@ Only public methods are intercepted when using proxy-based AOP. Calls to private
 If a transactional method makes an internal call to another method within the same class, and this method is not public (or not explicitly transactional when called externally), that call will not be intercepted by the proxy. As a result, the transaction management behavior, such as starting a new transaction, joining an existing one, or rolling back, will not be applied.
 For transactions to work, methods need to be public and accessed externally — typically through another transactional method or service layer.
 
-#### `Q` Explain the concept of optimistic and pessimistic locking. How can they be implemented in a Spring Boot application to handle concurrent transactions??
-`A` Optimistic Locking: Uses versioning to check if the data changed between transactions, typically implemented using a version column in the entity.
-Pessimistic Locking: Locks the data at the row level until the transaction completes; this can be implemented by setting lock modes in JPA queries, e.g., @Lock(LockModeType.PESSIMISTIC_WRITE).
-
 #### `Q` What if DB crash during a commit?
-`A` Write ahead log and recovery procedures are applied to complete or rollback the commit. 
+`A` Write ahead log and recovery procedures are applied to complete or rollback the commit.
 
 #### `Q` Why read only transactions are used?
 `A` A read-only transaction ensures a consistent snapshot of the data without allowing modifications, optimizing for performance and isolation, while a regular read might not guarantee the same isolation or consistency.
@@ -473,20 +452,51 @@ Note that, all common SQL databases use MVCC. Some NoSQL databases like MongoDB 
 #### `Q` What is the default isolation level in Spring if not specified??
 `A` If not specified, Spring uses the default isolation level of the underlying database, which is typically READ_COMMITTED.
 
-#### `Q` Question?
-`A` Answer
-
-#### `Q` Question?
-`A` Answer
-
-#### `Q` Question?
-`A` Answer
-
-#### `Q` Question?
-`A` Answer
 
 
 
+
+
+
+
+
+
+## `Indexing` 
+#### `Q` What are indexes and their different types?
+`A` Indexes are data structures that improve the speed of data retrieval operations within a database table at the cost of additional writes and storage space to maintain the index data structure.
+- Primary Index: Index using the primary key.
+- Unique Index: This index does not allow the field to have duplicate values if the column is unique indexed.
+- Secondary Index / Non-unique index: Unlike the primary index, a secondary index may not be based on a unique key, and multiple entries can have the same key. It is used to access data in sequential order, but using non-primary keys.
+- Composite Index: Also known as a concatenated index, involves multiple columns. Composite indexes can be particularly useful for queries that test all the columns in the index, or prefix the columns.
+- Clustered Index: In a clustered index, the order of the physical data records on the disk is the same as the index order. There can be only one clustered index per table because data rows themselves can be stored in only one order. The primary key of a table is a great candidate for a clustered index.
+- Bitmap Index: Bitmap indexes are typically used for columns with low cardinality, which means the column has a very few unique values. They use bitmaps (arrays of binary digits) to represent the existence of data values, making it highly efficient for indexing columns with Boolean values or null status.
+- Partial Index: Also known as a filtered index, it only indexes a subset of the data in a table.
+- Full-text Index: Used on columns holding large strings or documents, full-text indexes allow for the searching of words or phrases within the strings. This type of indexing is common in applications handling large textual data like logs, documents, and descriptions allowing complex search queries.
+- Covering Index: A covering index includes all the columns needed for a query to be processed. Essentially, it "covers" the query.
+
+
+
+
+
+
+
+
+
+## `Security`
+#### `Q` How do you develop and enforce database confidentiality policies?
+`A` By assessing data sensitivity, defining access controls, and implementing layers of security such as encryption and user authentication. Enforcing these policies involves regular audits, updating security protocols as per compliance standards, and training users on data privacy practices.
+
+
+
+
+
+
+
+
+
+## `Ad-Hoc`
+#### `Q` How do you know when to follow "procedural" logic?
+`A` Procedural logic is suited to tasks that involve sequential steps, such as data processing routines, complex calculations, and detailed instructions that must be executed in a specific order. It’s particularly useful when exact procedures must be followed to achieve the desired outcomes, ensuring precision and control over program flow.
 
 #### `Q`Should you use create table if not exist (or ORM based table creation) from the web server?
 `A` If I do this, the web server will have full privilege which is bad because the web server has drop
@@ -507,9 +517,6 @@ cypher. Homomorphic encryption, introduced by IBM, so-called future of security,
 apply those on a cypher text! Of course, it is not magic, extra level of processing is needed, so
 it is ridiculously slow yet. That's why it is called ultimate security tech for 'future'.
 
-#### `Q` How UUID is bad?
-`A`
-
 #### `Q` In composite indexing what orders are best?
 `A` When we're indexing, we don't care about space. We should consider how the B tree may
 respond quick, so we should put more selective(unique, less-repeat) field on the left. Let's assume
@@ -517,16 +524,35 @@ an index of productId and category, if we put category on left then there will b
 level nodes each one containing huge amount of second. But using productId will do the reverse
 and result faster.
 
-#### `Q` How indexes that are too large for RAM stored in disc and accessed?
-`A`
-#### `Q` What is better, making a column non-null or putting null values or putting dummy value like 0?
-`A`
-#### `Q` How does postgres determine a record in a row is null?
-`A`
-#### `Q` Is there can be any difference in select count(*), select count(col_name) in a single column table? If yes then why would!? And when?
-`A`
-#### `Q` Why select * from t where c is null gives result but select * from t where c in [null] doesn't?
-`A`
-#### `Q` Do databases support nulls in the index?
-`A` 
+#### `Q` How UUID is bad?
+`A` UUIDs can be problematic primarily due to their size (16 bytes) compared to traditional integer IDs (typically 4 bytes),
+which can lead to increased storage and index size. This can impact performance, particularly in database operations
+involving joins (string comparing is costly - O(N)), indexing (no order, B-tree performs like hashing as there is no chance of ranged query),
+and data retrieval. Additionally, UUIDs are not naturally ordered, which can lead to inefficiencies in data storage and fragmentation.
 
+#### `Q` How indexes that are too large for RAM stored in disc and accessed?
+`A` Indexes too large to fit into RAM are stored on disk. When a query is executed, the database retrieves the needed
+parts of the index from disk into RAM. This process can slow down data retrieval time compared to when everything fits into RAM.
+Databases use mechanisms like caching and buffer management to optimize the performance of disk-based index access.
+
+#### `Q` What is better, making a column non-null or putting null values or putting dummy value like 0?
+`A` Generally, making a column non-null is better if you expect a value for every record; but if a field is avoidably
+nullable then a nullable column is better choice than putting dummy values like '0'. Because even when put an integer 0,
+it takes 8 bits memory but while storing null in a field databases use very efficient low memory consuming techniques like bit map.
+I.e.: A record with 8 null fields will take equal space to storing an integer by using binary bit map.
+
+#### `Q` How does postgres determine a record in a row is null?
+`A` Postgres uses a special area in the row's header known as the null bitmap, where each nullable column has a bit that indicates
+whether the column is null or not. If the bit is set, Postgres interprets that column as having a null value.
+
+#### `Q` Is there can be any difference in select count(*), select count(col_name) in a single column table? If yes then why would!? And when?
+`A` Yes, there can be a difference. SELECT COUNT(*) counts all rows in the table, including those with null values. In contrast,
+SELECT COUNT(col_name) counts only the rows where col_name is not null. The difference will be apparent in cases where col_name contains null values.
+
+#### `Q` Why select * from t where c is null gives result but select * from t where c in [null] doesn't?
+`A` This occurs because SQL's IN clause does not process NULL in the expected manner. NULL represents an unknown value,
+and IN [NULL] does not match anything, not even other NULLs. Instead, IS NULL must specifically be used to check for null values.
+
+#### `Q` Do databases support nulls in the index?
+`A` Most databases, including PostgreSQL and MySQL, do allow null values to be indexed. However, the way nulls are handled in indexes
+can vary between database systems. Some databases can index null values by default, while others require specific configuration or handling.
