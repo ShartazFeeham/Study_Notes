@@ -308,7 +308,7 @@ across multiple servers, replication is crucial for maintaining high availabilit
 and scaling read operations in critical applications.
 
 
-# `Part 5: Concurrency`
+# `Part 6: Concurrency`
 ### `Shared lock & exclusive lock`
 When `shared lock or read lock` applied on a/some row then it means that we're reading the rows 
 and somebody `must not change or update` things in the middle of the way, whoever others can 
@@ -363,7 +363,7 @@ again then it found isBooked = 1. This result may differ in different DB engines
 
 ![img_15.png](resources/img_15.png)
 
-# `Part 6: Cursors`
+# `Part 7: Cursors`
 While a ranged amount of data needed to be processed, the whole operation can be quite lengthy
 and memory consuming, then server gets all. `Cursor` is the solution by which we can 
 `create a stream of data`(Like future in Java), in is ready to be executed, 
@@ -387,6 +387,50 @@ because of immediate data access. Cons: huge client memory, huge network traffic
 #### `Q` What do you understand by database testing?
 `A` a) Testing of data integrity and validity. b) Performance of database. c) Testing of procedure, functions, and triggers
 
+### `Q` What is denormalization in database design?
+`A` Denormalization is the process of adding redundancy to a database to improve read performance, typically at the cost of write performance and increased storage requirements. It involves combining tables or adding redundant data to reduce the need for complex joins.
+
+### `Q` What is query pagination and why is it useful?
+`A` Query pagination involves splitting large datasets into smaller, manageable chunks or "pages" that can be individually retrieved and displayed. It's particularly useful in web applications for enhancing user experience and reducing server load by only fetching data as needed.
+
+### `Q` Explain the difference between DELETE and TRUNCATE commands.
+`A` DELETE removes rows from a table based on the condition provided and can be rolled back. TRUNCATE removes all rows from a table without logging each row delete, thus it cannot be rolled back in most RDBMS. It is faster and uses fewer system and transaction log resources.
+
+### `Q` Describe a scenario where an index should NOT be used.
+`A` Indexes should not be used in tables with frequent large batch updates or high transaction volumes where the overhead of maintaining the index might outweigh the performance benefits. Also, for very small tables, the performance benefit might be negligible.
+
+### `Q` What is a non-correlated subquery?
+`A` A non-correlated subquery is a subquery that can be run independently of the outer query and returns a value or set of values to be used by the outer query. This type of subquery does not depend on data from the outer query to execute.
+
+### `Q` How can databases handle concurrency?
+`A` Databases handle concurrency through locking mechanisms (optimistic and pessimistic locking), versioning, and isolation levels, which ensure data consistency and integrity when multiple users access data at the same time.
+
+### `Q` What is the role of a DBA (Database Administrator)?
+`A` A DBA is responsible for installing, configuring, upgrading, administering, monitoring, and maintaining the security of databases in an organization. They ensure data availability, performance, and compliance with industry regulations.
+
+### `Q` What are stored procedures and how are they utilized?
+`A` Stored procedures are precompiled sets of SQL queries that are stored in the database. They can be invoked/reused by applications and can help secure databases by encapsulating business logic within the database, reducing overhead and enhancing security by limiting direct SQL operations.
+
+### `Q` What is SQL ANSI standard?
+`A` SQL ANSI standard refers to the American National Standards Institute (ANSI) standards for SQL, which provide guidelines and specifications to ensure SQL language syntax and operations are consistent across different database systems, promoting interoperability and reducing the complexities involved in managing multiple database systems.
+
+#### `Q` What is the N+1 selects problem in ORMs?
+`A` The N+1 selects problem occurs when an ORM fetches objects and their associations with one query for the master record and then one query for each related detail record, leading to many unnecessary database hits. This can be mitigated by using eager loading techniques.
+
+#### `Q` What is SQL injection and how can it be prevented?
+`A` SQL injection is a security vulnerability through which an attacker can execute arbitrary SQL code on a database by manipulating the inputs to a web application. It can be prevented by using parameterized queries, prepared statements, and proper input validation.
+
+#### `Q` Explain the difference between INNER JOIN and OUTER JOIN.
+`A` An INNER JOIN returns only the records where there is a match in both joined tables. An OUTER JOIN (LEFT, RIGHT, or FULL) returns all records from one side of the join and the matched records from the other side; if there is no match, NULL values are used to fill in the gaps.
+
+#### `Q` How do database views work and what are their advantages?
+`A` A database view is a virtual table based on a SQL query which pulls data from underlying tables. They simplify complex queries, enhance security by restricting access to underlying data, and can aid performance by serving as a mechanism for SQL optimization.
+
+#### `Q` What are materialized views and how do they differ from standard views?
+`A` Materialized views are database objects that contain the results of a query and can be refreshed on demand; they physically store the data. In contrast, standard views are definitions of queries that dynamically retrieve data when used but do not store the data themselves.
+
+#### `Q` What is query pagination and why is it useful?
+`A` Query pagination involves splitting large datasets into smaller, manageable chunks or "pages" that can be individually retrieved and displayed. It's particularly useful in web applications for enhancing user experience and reducing server load by only fetching data as needed.
 
 
 
@@ -611,6 +655,256 @@ Note that, all common SQL databases use MVCC. Some NoSQL databases like MongoDB 
 - Full-text Index: Used on columns holding large strings or documents, full-text indexes allow for the searching of words or phrases within the strings. This type of indexing is common in applications handling large textual data like logs, documents, and descriptions allowing complex search queries.
 - Covering Index: A covering index includes all the columns needed for a query to be processed. Essentially, it "covers" the query.
 
+#### `Q` What is the difference between clustered and non-clustered indexes?
+`A` A clustered index determines the physical order of data in a table and stores it in the index leaf nodes. There is only one clustered index per table, which can improve the performance of data access by reducing disk I/O. A non-clustered index, however, creates a separate structure to hold the index data, which includes pointers to the location of the actual data. This allows for multiple non-clustered indexes per table but can result in slower data access compared to clustered indexes.
+
+#### `Q` Explain the concept of index selectivity and its importance.
+`A` Index selectivity  is defined as the ratio of distinct values to the total number of values in a column. High selectivity (a higher ratio) means the index can more effectively optimize queries, as the index entries are more unique
+
+#### `Q` Can you create an index on a view?
+`A` Generally, you can't create an index on a view because views are virtual tables and don't store any data. However, some databases allow indexing on materialized views, which contain the actual data. This is useful when the view is used frequently, and you want to improve its performance.
+
+#### `Q` Explain "Index Covering" for queries.
+`A` Index covering occurs when all the columns used in a query are part of one index. Essentially, if the index contains all required fields for a query output, the database system can retrieve data from the index itself without needing to look up the full records in the table, resulting in much faster query execution.
+
+#### `Q` What is an inverted index?
+`A` An inverted index is a database index that stores a mapping from content to its location in a database file, table, or a document. It's commonly used in document stores and full-text search engines to allow fast text searches.
+
+#### `Q` What are partial indexes and their use cases?
+`A` Partial indexes are indexes built on a subset of a database table's rows, determined by a specified filter. They are useful when only a small subsection of the data needs to be frequently accessed or queried, thereby improving efficiency and reducing index size.
+
+#### `Q` How do functional-based indexes work, and when are they used?
+`A` Functional-based indexes are used to index the results of a function applied to one or more columns. They are useful when queries commonly involve conditions on transformations of data (like uppercase strings).
+
+#### `Q` What is index cardinality, and why is it important?
+`A` Index cardinality refers to the uniqueness of data values represented in an index. High cardinality indexes (with many unique values) are typically more efficient at data retrieval than low cardinality indexes (with many repeated values).
+
+#### `Q` What is an index hint, and why might one use it?
+`A` An index hint is a directive used in SQL queries to suggest to the query optimizer to use a specific index when executing the query. It can be used to improve performance, particularly in complex queries where the optimizer might not choose the most efficient execution plan.
+
+#### `Q`  What is a filtered index?
+`A` A filtered index is an index with a WHERE clause, essentially indexing a subset of rows in a table. This can be more space-efficient and perform better than full-table indexes for queries on sizable but specific segments of data.
+
+#### `Q` What challenges might arise with indexes when scaling horizontally (sharding)?
+`A` When sharding a database, indexes must be maintained on each shard, which can lead to inconsistencies if not carefully managed. Cross-shard queries might become slower and more complex, as they may require aggregating index results from multiple shards.
+
+#### `Q` Explain how virtual indexes are used in database testing.
+`A` Virtual indexes are hypothetical indexes that do not actually exist in the database but are considered by the query optimizer during the planning phase to predict whether creating an actual index might help query performance. They are used in testing to avoid the overhead of index creation for performance tuning purposes only.
+
+#### `Q` How do you decide which columns to index?
+`A` Columns that are frequently used in the WHERE clause, JOIN conditions, or as part of an ORDER BY or GROUP BY clause are good candidates for indexing.
+
+#### `Q` What is an index seek?
+`A` An index seek occurs when the query optimizer uses the index to find specific index entries quickly; usually, this happens when a query's WHERE clause matches columns that are part of a useful index.
+
+#### `Q` What is partitioned indexing?
+`A` Partitioned indexing involves partitioning an index in a similar way as partitioning a table. This can improve the performance and manageability of indexes by restricting index maintenance and search to relevant partitions.
+
+#### `Q` What is index fragmentation?
+`A` Index fragmentation refers to the physical fragmentation of an index on disk or in memory. In this case, the index’s data pages may not be sequential or unnecessary gaps may occur. This can slow down access to indexes by database management systems (DBMS) and negatively impact query performance.
+
+#### `Q` What is an adaptive hash index?
+`A` An adaptive hash index is a feature in some databases that automatically creates hash indexes on certain table partitions based on observed query patterns, improving performance with no prior configuration required.
+
+#### `Q` How do you perform index tuning?
+`A` Index tuning involves analyzing query performance, identifying bottlenecks, and then creating, modifying, or dropping indexes based on the actual usage pattern. Tools and scripts that analyze query plans and index usage can assist greatly in this process.
+
+#### `Q` What are the types of index structures commonly used in databases?
+`A` Common types of index structures include B-Trees, R-Trees, Hash tables, and Bitmaps. Each serves different use cases, from general-purpose indexing and range queries to spatial data searching and indexing low-cardinality columns.
+
+#### `Q` What is the difference between a dense index and a sparse index?
+`A` A dense index has an index entry for every single record in the data file, whereas a sparse index only contains entries for some records. Sparse indexes require less space and are suitable for cases where records are sequentially stored.
+
+
+
+
+
+
+
+
+
+## `Partitioning`
+#### `Q` What are the types of partitioning available in SQL databases?
+`A` Common types include range partitioning, list partitioning, hash partitioning, and composite partitioning.
+
+#### `Q` What are global and local indexes in partitioned tables?
+`A` Global indexes span all partitions of a table, while local indexes are specific to individual partitions.
+
+#### `Q` Is partitioning helpful for write-heavy applications?
+`A` Yes, by reducing lock contention and distributing the load across partitions, it can enhance performance in write-heavy applications.
+
+#### `Q` Can you convert a non-partitioned table to a partitioned table?
+`A` Yes, most databases allow altering of table structures to introduce partitioning, though specific steps can vary.
+
+#### `Q` Explain the concept of partition pruning.
+`A` Partition pruning is a performance optimization technique where a database query optimizer automatically skips scanning partitions that do not match the query criteria.
+
+#### `Q` How does hash partitioning work?
+`A` Hash partitioning distributes data across partitions based on a hash function applied to the partition key, aiming for a uniform distribution of data.
+
+#### `Q` What is composite partitioning?
+`A` Composite partitioning involves combining two or more partitioning strategies, such as first applying range partitioning and then hash partitioning within those partitions.
+
+#### `Q` If a table is partitioned in 10 sub tables and you run a query which doesn't involve partition key, then how the query will be executed and data will be fetched.
+`A` If a query is executed on a partitioned table without involving the partition key, the database system will need to perform a full table scan across all partitions. This is because the absence of the partition key in the query conditions means that the system cannot determine which partition(s) contain the relevant data. Consequently, the database engine must search through each subtable (partition) to retrieve the necessary data. This type of operation is less efficient than queries that use the partition key.
+
+
+
+
+
+
+
+
+
+
+## `Sharding`
+#### `Q` What are the types of sharding?
+`A` Key types include horizontal sharding (splitting rows), vertical sharding (splitting columns), and functional sharding (dividing data by business function).
+
+#### `Q` Explain consistent hashing used in sharding.
+`A` Consistent hashing is a technique used to distribute entries among a fixed number of buckets (shards) with minimal movement of entries when new buckets are added or removed.
+
+#### `Q` How do you handle transactions in a sharded environment?
+`A` Handling transactions across shards can be complex and typically involves mechanisms to ensure atomicity and consistency such as two-phase commits or compensating transactions or saga patterns.
+
+#### `Q`  Can you reshard data once sharding is implemented?
+`A` Yes, data can be resharded but it generally involves significant complexity and overhead. It may require redistribution of data and application downtime.
+
+#### `Q` How do you query data in a sharded environment?
+`A` Queries may need to be executed across multiple shards. Applications often use a shard map to route queries to the appropriate shard or aggregate results from multiple shards.
+
+#### `Q` When should vertical sharding be considered over horizontal sharding?
+`A` Vertical sharding can be considered when different tables of a database have different usage patterns or when certain columns are accessed much more frequently than others.
+
+#### `Q` How do ORMs handle sharded databases?
+`A`  ORMs can handle sharded databases through shard-aware plugins or extensions that can route data operations to the correct shard based on shard keys.
+
+#### `Q` How does sharding interact with cloud services?
+`A` Many cloud databases support automatic sharding, allowing applications to scale horizontally across multiple instances seamlessly as demand increases.
+
+
+
+
+
+
+
+
+
+
+
+
+## `Replication`
+#### `Q` What are the main types of replication?
+`A` The main types include master-slave replication, peer-to-peer or multi master replication, and snapshot replication.
+
+#### `Q` What are the benefits of database replication?
+`A` Benefits include increased data availability, fault tolerance, load balancing, and separate environments for critical operations like reporting and backup without impacting production.
+
+#### `Q` What challenges can occur with database replication?
+`A` Challenges include managing data consistency, conflict resolution, replication lag, and the overhead of maintaining multiple synchronized systems.
+
+#### `Q` What is replication lag and how can it be mitigated?
+`A` Replication lag is the delay between an operation being performed on the primary server and being replicated to the secondary server(s). It can be mitigated by optimizing the network, increasing system resources, or simplifying transactions.
+
+#### `Q` Explain synchronous versus asynchronous replication.
+`A` Synchronous replication ensures that transactions must be committed on all replicas at the same time. Asynchronous replication allows transactions to be replicated in the background, potentially leading to replication lag but less impact on performance.
+
+#### `Q` How do you handle conflict resolution in bidirectional replication?
+`A` Conflict resolution strategies might include "last-write wins," timestamp-based resolution, or merging changes according to application-specific rules to resolve conflicts in bidirectional replication.
+
+#### `Q` Explain log shipping as a form of replication.
+`A` Log shipping involves automatic sending of transaction log files from one server to another. The secondary server restores the logs, keeping the database as an exact copy of the primary.
+
+#### `Q` What is physical replication in database systems, and how does it work?
+`A` Physical replication involves copying and synchronizing the exact binary data from one database to another. This type of replication is usually implemented at the storage or file-system level and captures all changes made in the database, including data, schema, and index modifications. It ensures a byte-for-byte copy between the master and the replica, typically using a streaming replication method that can be synchronous or asynchronous.
+
+#### `Q` How does physical replication handle failover scenarios?
+`A`  Physical replication is often used in high-availability setups to handle failover scenarios. If the primary database fails, one of the physically replicated secondary databases can take over as the primary. This switchover can be automated or manually triggered, depending on the system configuration, to maintain service availability without significant downtime.
+
+#### `Q`  Compare the performance implications of physical and logical replication.
+`A` Physical replication generally has less overhead on the source system since it directly copies binary data, often leveraging existing database mechanisms and infrastructure. This makes it very efficient in terms of performance. However, because it replicates all data, it might demand more bandwidth and storage. Logical replication, on the other hand, may introduce additional CPU overhead on the source database as it needs to transform transaction logs into a logical format and can apply filters or transformations. This additional processing can impact database performance but provides more control over what is replicated, leading to potentially lower network and storage requirements if only a subset of the data needs to be replicated.
+
+
+
+
+
+
+
+## `Concurrency`
+
+#### `Q` What is database concurrency?
+`A` Database concurrency refers to the ability of a database system to allow multiple transactions to access the same data simultaneously without compromising data integrity.
+
+#### `Q` What are the common issues faced with database concurrency?
+`A` Common issues include dirty reads, non-repeatable reads, phantom reads, and lost updates.
+
+#### `Q` How does optimistic concurrency control work?
+`A` Optimistic concurrency control assumes that multiple transactions can complete without interfering with each other, checking for conflicts only at commit time.
+
+#### `Q` How does pessimistic concurrency control work?
+`A` Pessimistic concurrency control locks resources during a transaction to prevent other transactions from accessing the same resources, thus preventing conflicts.
+
+#### `Q` What is a lock in database concurrency?
+`A` A lock is a mechanism to control access to data in a database to prevent concurrent transactions from interfering with each other.
+
+#### `Q` What is a deadlock in a database?
+`A` A deadlock occurs when two or more transactions are waiting indefinitely for one another to release locks.
+
+#### `Q` How can deadlocks be prevented?
+`A` Deadlocks can be prevented by acquiring locks in a consistent order, using timeouts, or implementing deadlock detection and resolution strategies.
+
+#### `Q` What is a two-phase locking protocol?
+`A` Two-phase locking protocol ensures serializability by dividing the transaction process into two phases: lock acquisition and lock release.
+
+#### `Q` What is timestamp-based concurrency control?
+`A` Timestamp-based concurrency control assigns a unique timestamp to each transaction and uses it to order transactions to ensure consistency.
+
+#### `Q` What is Multi-Version Concurrency Control (MVCC)?
+`A` MVCC allows multiple versions of data to exist simultaneously, enabling readers to access data without blocking writers, thus enhancing concurrency.
+
+#### `Q` How do isolation levels relate to concurrency?
+`A` Isolation levels determine how transaction integrity is visible to other transactions and can affect the concurrency and performance of a system.
+
+#### `Q` What is a lock escalation?
+`A` Lock escalation is a process of converting multiple fine-grained locks into a single coarse-grained lock to reduce overhead.
+
+#### `Q` What is a write skew?
+`A` Write skew occurs when two transactions read overlapping data and update non-overlapping data, violating consistency.
+
+#### `Q` What is lock contention?
+`A` Lock contention happens when multiple transactions compete for the same lock, leading to delays and reduced concurrency.
+
+#### `Q` What is a shared lock?
+`A` A shared lock allows multiple transactions to read a resource but not modify it.
+
+#### `Q` What is an exclusive lock?
+`A` An exclusive lock prevents other transactions from accessing the locked resource for both reading and writing.
+
+#### `Q` How do databases handle high concurrency scenarios?
+`A` Databases handle high concurrency through techniques like indexing, partitioning, replication, and tuning isolation levels to balance performance and consistency.
+
+#### `Q` How does a database system handle long-running transactions that hold locks?
+`A` The database system will either abort the transaction or use a timeout to release the locks.
+
+#### `Q` What is the difference between a shared lock and an intent lock?
+`A` A shared lock allows multiple transactions to read a resource but not modify it, while an intent lock is used to prevent other transactions from acquiring a shared lock on the same resource.
+
+#### `Q` What is a lock timeout?
+`A` A lock timeout is a mechanism used to automatically release a lock after a specified time has elapsed.
+
+#### `Q` What is a deadlock detector?
+`A` A deadlock detector is a mechanism that monitors the database for potential deadlocks and can take actions to prevent or resolve them.
+
+#### `Q` What is the difference between optimistic and pessimistic locking?
+`A` Optimistic locking assumes that multiple transactions can complete without interfering with each other, while pessimistic locking assumes that transactions will conflict and locks resources accordingly.
+
+#### `Q` What is a lost update?
+`A` A lost update occurs when two transactions update the same data simultaneously, and one of the transactions is lost or overwritten.
+
+#### `Q` How do you prevent lost updates?
+`A` Lost updates can be prevented using optimistic or pessimistic locking, or by using a timestamp or version number to track changes.
+
+
 
 
 
@@ -622,6 +916,68 @@ Note that, all common SQL databases use MVCC. Some NoSQL databases like MongoDB 
 ## `Security`
 #### `Q` How do you develop and enforce database confidentiality policies?
 `A` By assessing data sensitivity, defining access controls, and implementing layers of security such as encryption and user authentication. Enforcing these policies involves regular audits, updating security protocols as per compliance standards, and training users on data privacy practices.
+
+#### `Q` What is SQL injection and how can it be prevented?
+`A` SQL injection is a code injection technique that exploits vulnerabilities in an application's software by inserting malicious SQL code into query fields. It can be prevented by using parameterized queries or prepared statements, validating user inputs, and employing web application firewalls.
+
+#### `Q` What are some best practices for database encryption?
+`A` Best practices include encrypting sensitive data both in transit and at rest, using strong encryption algorithms, managing encryption keys securely, and regularly updating encryption protocols.
+
+#### `Q` How do you secure user authentication in a database system?
+`A` Implement strong password policies, use multi-factor authentication, store passwords with cryptographic hashing, and regularly audit authentication logs for suspicious activities.
+
+#### `Q` What is the principle of least privilege and how is it applied in databases?
+`A` The principle of least privilege involves granting users the minimum level of access necessary for their roles. In databases, this means setting up roles and permissions carefully and regularly reviewing them to minimize security risks.
+
+#### `Q` How do you protect against unauthorized database access?
+`A` Use strong authentication methods, enforce strict access controls, regularly update and patch database systems, and monitor access logs for unusual activities.
+
+#### `Q` What is a database firewall and how does it enhance security?
+`A` A database firewall is a security barrier that monitors and controls database traffic based on predefined security rules. It helps prevent unauthorized access, SQL injection, and other attacks by filtering suspicious queries.
+
+#### `Q` How can data masking be used to enhance database security?
+`A` Data masking obscures sensitive data by replacing it with similar, non-sensitive data. It's used in non-production environments to protect real data from exposure during development and testing.
+
+#### `Q` What role does auditing play in database security?
+`A` Auditing involves tracking and recording database activities to detect and respond to suspicious actions. It helps ensure compliance, identify security breaches, and provide forensic evidence.
+
+#### `Q` How do you ensure secure database backups?
+`A` Secure backups by encrypting them, storing them in a separate, secure location, restricting access to backup files, and regularly testing backup restoration processes.
+
+#### `Q` What are common strategies for database patch management?
+`A` Regularly update database systems with the latest security patches, test patches in a staging environment before deployment, and implement automated patch management tools.
+
+#### `Q` How does role-based access control enhance database security?
+`A` Role-based access control assigns permissions to roles rather than individual users, simplifying management and ensuring that users have appropriate access based on their job functions.
+
+#### `Q` What is database hardening, and how is it performed?
+`A` Database hardening involves securing a database system by reducing its attack surface. This includes disabling unnecessary services, applying patches, configuring security settings, and regularly auditing the system.
+
+#### `Q` How do you secure database connections?
+`A` Use SSL/TLS for encrypted connections, restrict database access to specific IP addresses, and use secure connection strings with minimal permissions.
+
+#### `Q` What is the importance of logging in database security?
+`A` Logging provides a record of database activities, helping to detect unauthorized access, monitor user actions, and provide data for forensic analysis after a security incident.
+
+#### `Q` How do you implement data loss prevention in databases?
+`A` Use encryption, regular backups, access controls, and monitoring tools to prevent unauthorized access and accidental data loss.
+
+#### `Q` What measures can be taken to secure a database server?
+`A` Measures include physical security controls, network segmentation, patch management, and regular security audits.
+
+#### `Q` How can you protect against insider threats in database security?
+`A` Implement strict access controls, monitor user activities, use data masking, and conduct regular security training for employees.
+
+#### `Q` What is the role of a database security policy?
+`A` A database security policy defines the rules and procedures for protecting database systems and data, ensuring compliance with legal and organizational standards.
+
+#### `Q` How do you handle database security in a cloud environment?
+`A` Use cloud provider security features, encrypt data, configure access controls, and monitor cloud database activities for suspicious behavior.
+
+#### `Q` What are the benefits of using a Virtual Private Network (VPN) for database access?
+`A` A VPN encrypts data traffic, providing a secure connection to the database and protecting it from eavesdropping and unauthorized access.
+
+
 
 
 
@@ -653,6 +1009,9 @@ querying, we'll need comparison and filter logic to be applied on plain text, ca
 cypher. Homomorphic encryption, introduced by IBM, so-called future of security, actually can
 apply those on a cypher text! Of course, it is not magic, extra level of processing is needed, so
 it is ridiculously slow yet. That's why it is called ultimate security tech for 'future'.
+
+### `Q` What is de-normalization in database design?
+`A` De-normalization involves adding redundant data or grouping data to a database to speed up read operations, often at the expense of additional storage and more complex data updates. It's typically used to reduce the number of table joins required in queries.
 
 #### `Q` In composite indexing what orders are best?
 `A` When we're indexing, we don't care about space. We should consider how the B tree may
