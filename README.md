@@ -1052,3 +1052,218 @@ and IN [NULL] does not match anything, not even other NULLs. Instead, IS NULL mu
 #### `Q` Do databases support nulls in the index?
 `A` Most databases, including PostgreSQL and MySQL, do allow null values to be indexed. However, the way nulls are handled in indexes
 can vary between database systems. Some databases can index null values by default, while others require specific configuration or handling.
+
+# `---------------- SQL ----------------` 
+## `DDL`
+#### `Q` What is DDL in SQL?
+`A` DDL stands for Data Definition Language, which includes SQL commands used to define the database structure.
+
+#### `Q` What are the main DDL commands in SQL?
+`A` The main DDL commands are CREATE, ALTER, DROP, TRUNCATE, and RENAME.
+
+#### `Q` How do you create a table in SQL?
+```sql
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    ...
+);
+```
+
+#### `Q` How do you alter a table to add a column?
+```sql
+ALTER TABLE table_name
+ADD column_name datatype;
+```
+
+#### `Q` How do you modify a column in an existing table?
+```sql
+ALTER TABLE table_name
+MODIFY column_name new_datatype;
+```
+
+#### `Q` How do you delete a table in SQL?
+```sql
+DROP TABLE table_name;
+```
+
+#### `Q` How do you rename a table?
+```sql
+ALTER TABLE old_table_name
+RENAME TO new_table_name;
+```
+
+#### `Q` How do you remove all data from a table without deleting the table?
+```sql
+TRUNCATE TABLE table_name;
+```
+
+#### `Q` How do you create an index on a table?
+```sql
+CREATE INDEX index_name
+ON table_name (column1, column2, ...);
+```
+
+#### `Q` How do you drop an index?
+```sql
+DROP INDEX index_name;
+```
+
+#### `Q` How do you add a primary key to an existing table?
+```sql
+ALTER TABLE table_name
+ADD PRIMARY KEY (column_name);
+```
+
+#### `Q` How do you add a foreign key to a table?
+```sql
+ALTER TABLE table_name
+ADD FOREIGN KEY (column_name)
+REFERENCES other_table_name (column_name);
+```
+
+#### `Q` How do you change the data type of a column?
+```sql
+ALTER TABLE table_name
+MODIFY column_name new_datatype;
+```
+
+#### `Q` How do you set a default value for a column?
+```sql
+ALTER TABLE table_name
+ALTER COLUMN column_name SET DEFAULT default_value;
+```
+
+#### `Q` How do you remove a column from a table?
+```sql
+ALTER TABLE table_name
+DROP COLUMN column_name;
+```
+
+#### `Q` How do you rename a column in a table?
+```sql
+ALTER TABLE table_name
+RENAME COLUMN old_column_name TO new_column_name;
+```
+
+#### `Q` How do you create a view?
+```sql
+CREATE VIEW view_name AS
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;
+```
+
+#### `Q` How do you drop a view?
+```sql
+DROP VIEW view_name;
+```
+
+#### `Q` How do you create a schema in SQL?
+```sql
+CREATE SCHEMA schema_name;
+```
+
+#### `Q` How do you alter a schema to add a table?
+```sql
+ALTER SCHEMA schema_name
+ADD TABLE table_name (...);
+```
+#### `Q` How do you add a new column to an existing table?
+`A` Use the `ALTER TABLE` statement along with `ADD COLUMN`, specifying the column name and data type.
+```sql
+ALTER TABLE table_name
+ADD COLUMN new_column_name data_type;
+```
+
+#### `Q` How do you create a foreign key constraint?
+`A` Use the `FOREIGN KEY` keyword with `REFERENCES` in `CREATE TABLE` or `ALTER TABLE`.
+```sql
+ALTER TABLE child_table
+ADD CONSTRAINT fk_name FOREIGN KEY (column_name)
+REFERENCES parent_table (column_name);
+```
+
+#### `Q` How do you enable a constraint in SQL?
+`A` Use `ALTER TABLE` with the `ENABLE` keyword.
+```sql
+ALTER TABLE table_name
+ENABLE CONSTRAINT constraint_name;
+```
+
+#### `Q` How do you disable a constraint in SQL?
+`A` Use `ALTER TABLE` with the `DISABLE` keyword.
+```sql
+ALTER TABLE table_name
+DISABLE CONSTRAINT constraint_name;
+```
+
+#### `Q` How do you rename a table in SQL?
+`A` Use the `ALTER TABLE` statement with `RENAME TO`.
+```sql
+ALTER TABLE old_table_name
+RENAME TO new_table_name;
+```
+
+#### `Q` How do you set a column to not accept NULL values?
+`A` Use `ALTER TABLE` with `MODIFY` to set the column as `NOT NULL`.
+```sql
+ALTER TABLE table_name
+MODIFY column_name datatype NOT NULL;
+```
+
+#### `Q` How do you remove a primary key constraint?
+`A` Use `ALTER TABLE` with `DROP CONSTRAINT`.
+```sql
+ALTER TABLE table_name
+DROP CONSTRAINT primary_key_name;
+```
+
+#### `Q` How do you create a unique constraint?
+`A` Use `ALTER TABLE` with `ADD CONSTRAINT` and `UNIQUE`.
+```sql
+ALTER TABLE table_name
+ADD CONSTRAINT constraint_name UNIQUE (column_name);
+```
+
+#### `Q` How do you remove a unique constraint in SQL?
+`A` Use `ALTER TABLE` with `DROP CONSTRAINT`.
+```sql
+ALTER TABLE table_name
+DROP CONSTRAINT constraint_name;
+```
+
+#### `Q` How do you create a check constraint?
+`A` Use `ALTER TABLE` with `ADD CONSTRAINT` and `CHECK`.
+```sql
+ALTER TABLE table_name
+ADD CONSTRAINT constraint_name CHECK (condition);
+```
+
+#### `Q` How do you remove a check constraint?
+`A` Use `ALTER TABLE` with `DROP CONSTRAINT`.
+```sql
+ALTER TABLE table_name
+DROP CONSTRAINT constraint_name;
+```
+
+#### `Q` How do you create a default constraint?
+`A` Use `ALTER TABLE` with `ADD CONSTRAINT` and `DEFAULT`.
+```sql
+ALTER TABLE table_name
+ADD CONSTRAINT constraint_name DEFAULT default_value FOR column_name;
+```
+
+#### `Q` How do you remove a default constraint?
+`A` Use `ALTER TABLE` with `ALTER COLUMN` and `DROP DEFAULT`.
+```sql
+ALTER TABLE table_name
+ALTER COLUMN column_name DROP DEFAULT;
+```
+
+#### `Q` How do you create a composite primary key?
+`A` Use `CREATE TABLE` or `ALTER TABLE` with multiple columns in the `PRIMARY KEY`.
+```sql
+ALTER TABLE table_name
+ADD PRIMARY KEY (column1, column2);
+```
