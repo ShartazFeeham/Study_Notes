@@ -432,6 +432,132 @@ because of immediate data access. Cons: huge client memory, huge network traffic
 #### `Q` What is query pagination and why is it useful?
 `A` Query pagination involves splitting large datasets into smaller, manageable chunks or "pages" that can be individually retrieved and displayed. It's particularly useful in web applications for enhancing user experience and reducing server load by only fetching data as needed.
 
+### `Q` What do you understand by query optimization?
+
+`A` Query optimization involves refining a query to ensure it runs as efficiently as possible. This can include
+rewriting queries, indexing, selecting appropriate join methods, and considering the query execution plan to minimize
+resource usage and response time.
+
+### `Q` Is null value same as blank value or 0?
+
+`A` No, null value is not the same as a blank value or 0. A null value indicates the absence of a value or unknown data,
+whereas a blank value is an empty string (`''`), and 0 is a numeric value.
+
+### `Q` What is an aggregation in context of database?
+
+`A` Aggregation in a database context refers to computations on multiple rows of data to return a single value. Examples
+include functions like COUNT, SUM, AVG, MAX, and MIN.
+
+### `Q` What are the different levels of abstractions in database?
+
+`A` The different levels of abstractions in databases include the physical level (how data is stored), the logical
+level (what data is stored), and the view level (how users interact with data).
+
+### `Q` What is entity relationship model?
+
+`A` An entity relationship model (ER model) is a conceptual diagram that shows how entities (objects) relate to each
+other within a database. It is used to design and visualize the database structure.
+
+### `Q` What is normalization and what are the different types of it?
+
+`A` Normalization is the process of organizing data to minimize redundancy and improve data integrity. Different types
+include:
+
+1. First Normal Form (1NF)
+2. Second Normal Form (2NF)
+3. Third Normal Form (3NF)
+4. Boyce-Codd Normal Form (BCNF)
+5. Fourth Normal Form (4NF)
+6. Fifth Normal Form (5NF)
+
+### `Q` Explain different keys in database?
+
+`A` Different keys in a database include:
+
+* **Primary Key**: Uniquely identifies each record in a table.
+* **Foreign Key**: Links two tables together.
+* **Candidate Key**: A set of columns that can uniquely identify any record in a table.
+* **Composite Key**: A primary key composed of multiple columns.
+* **Super Key**: A set of columns that can uniquely identify rows in a table.
+* **Alternate Key**: A candidate key that is not the primary key.
+
+### `Q` What do you understand by functional and transitive dependency?
+
+`A` Functional dependency occurs when one attribute uniquely determines another attribute. Transitive dependency occurs
+when a non-key attribute depends on another non-key attribute.
+
+### `Q` What is a checkpoint in DBMS and when does it occur?
+
+`A` A checkpoint is a mechanism in DBMS to ensure data consistency and recoverability. It involves writing all in-memory
+data to permanent storage. Checkpoints occur periodically or when the database is idle.
+
+### `Q` What are triggers & stored procedures?
+
+`A` **Triggers**: Automatic procedures that execute in response to specific events on a table or view (insert, update,
+delete).
+**Stored Procedures**: Precompiled SQL code that can be executed as a single unit, allowing reuse and encapsulating
+business logic.
+
+### `Q` What are differences between hash join, merge join & nested loop?
+
+`A` **Hash Join**: Utilizes hash tables to join large datasets efficiently.
+**Merge Join**: Efficient for pre-sorted datasets, merges two sorted datasets.
+**Nested Loop Join**: Simple method that compares each row of one dataset with every row of another dataset, suitable
+for small datasets.
+
+### `Q` What is index hunting and how does it help in performance?
+
+`A` Index hunting is the process of identifying and creating appropriate indexes to improve query performance. It
+involves analyzing query patterns and optimizing queries for faster data retrieval.
+
+### `Q` What is difference between hierarchical and network DB model?
+
+`A` **Hierarchical DB Model**: Organizes data in a tree-like structure with parent-child relationships.
+**Network DB Model**: Organizes data using a graph structure with many-to-many relationships, enabling more complex
+relationships.
+
+### `Q` What is clause?
+
+`A` A clause in SQL is a component of a query that specifies conditions or limits operations. Examples include WHERE,
+HAVING, ORDER BY, and GROUP BY.
+
+### `Q` Why are SQL functions used?
+
+`A` SQL functions are used to perform operations on data. They can manipulate and transform data, such as string
+functions, numeric functions, date functions, aggregate functions, and more.
+
+### `Q` What is the need of MERGE statement?
+
+`A` The MERGE statement is used to synchronize two tables by performing insert, update, or delete operations based on
+specified conditions. It is useful for handling upserts in a single operation.
+
+### `Q` What is recursive stored procedure?
+
+`A` A recursive stored procedure is a procedure that calls itself directly or indirectly to solve problems that can be
+divided into similar sub-problems, such as hierarchical or tree-structured data.
+
+### `Q` Difference between HAVING CLAUSE vs WHERE CLAUSE?
+
+`A` **WHERE CLAUSE**: Filters rows before the aggregation.
+**HAVING CLAUSE**: Filters groups after aggregation.
+
+### `Q` What are aggregate and scalar functions?
+
+`A` **Aggregate Functions**: Operate on a set of values to return a single value (e.g., COUNT, SUM, AVG).
+**Scalar Functions**: Operate on a single value and return a single value (e.g., UPPER, ROUND, LENGTH).
+
+### `Q` What is collation?
+
+`A` Collation refers to the set of rules that determine how data is sorted and compared in a database, including case
+sensitivity, accent marks, and character set.
+
+### `Q` Difference between SQL and PL/SQL?
+
+`A` **SQL**: Standard language for querying and manipulating databases.
+**PL/SQL**: A procedural extension of SQL used in Oracle for writing complex scripts with variables, conditions, loops,
+and error handling.
+
+
 
 
 
@@ -1266,4 +1392,82 @@ ALTER COLUMN column_name DROP DEFAULT;
 ```sql
 ALTER TABLE table_name
 ADD PRIMARY KEY (column1, column2);
+```
+
+#### `Q` How do you create a duplicate table with and without data present?
+
+`A` Use the `CREATE TABLE ... AS SELECT ...` for duplicating with data and `CREATE TABLE ... LIKE ...` for duplicating
+structure.
+
+```sql
+-- With data
+CREATE TABLE duplicate_table AS 
+SELECT * FROM original_table;
+
+-- Without data
+CREATE TABLE duplicate_table LIKE original_table;
+```
+
+#### `Q` How do you calculate even and odd records from a table?
+
+`A` Use the `MOD` function to determine even and odd records.
+
+```sql
+-- Even records
+SELECT * FROM table_name
+WHERE MOD(column_name, 2) = 0;
+
+-- Odd records
+SELECT * FROM table_name
+WHERE MOD(column_name, 2) = 1;
+```
+
+#### `Q` How do you remove duplicate rows from a table?
+
+`A` Use a `DELETE` command with a subquery to remove duplicates based on a unique column or set of columns.
+
+```sql
+DELETE FROM table_name
+WHERE id NOT IN (
+    SELECT DISTINCT MIN(id) 
+    FROM table_name 
+    GROUP BY column1, column2, ...);
+```
+
+#### `Q` How do you perform email validation in SQL?
+
+`A` Use a `LIKE` clause with a pattern for basic email validation.
+
+```sql
+SELECT * FROM table_name
+WHERE email_column LIKE '%@%.%';
+```
+
+#### `Q` How do you find names of employees that begin with "A"?
+
+`A` Use a `LIKE` clause with a pattern.
+
+```sql
+SELECT * FROM employees
+WHERE name LIKE 'A%';
+```
+
+#### `Q` How do you get the third highest salary of an employee from the employee table?
+
+`A` Use a `SELECT` statement with the `DISTINCT` and `LIMIT` clauses.
+
+```sql
+SELECT DISTINCT salary 
+FROM employees
+ORDER BY salary DESC
+LIMIT 1 OFFSET 2;
+```
+
+#### `Q` How do you fetch the first five letters from a string?
+
+`A` Use the `SUBSTRING` or equivalent function.
+
+```sql
+SELECT SUBSTRING(column_name, 1, 5) AS first_five_letters 
+FROM table_name;
 ```
