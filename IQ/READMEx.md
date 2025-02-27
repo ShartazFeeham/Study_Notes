@@ -5,6 +5,12 @@
   - Share your experience of work and strategies usually followed?
     - How did you handle a new requirement (analyze)
     - How did you handle code quality (review)
+- How many types of inheritance? 
+- Why stringBuilder is better than traditional string concatenation?
+- Why String is immutable? 
+- What is marker interface and why it is used?
+- What is Serializable? 
+- What is serialVersionUID? 
 - How HashMap works?
 - How HashSet works?
 - How HashTable works & What are its drawbacks? 
@@ -28,6 +34,9 @@
   - What is Liskov substitution principle?
   - What is Interface segregation principle?
   - What is Dependency inversion principle?
+- Explain thread life cycle.
+- What is multithreading?
+- What are the Comparable and Comparator interfaces, when to use which one?
 - When is marker interfaces used, where they used & why they are used?
 - How lock is applied?
   - Explain necessity of locks. 
@@ -47,3 +56,17 @@
 - Can you explain EC2, AWS Lambda, S3, Functions and similar services that you are aware of? 
 - Can you explain how can you ensure security in the external services like AWS? 
 - What are the difference between Orchestration & Choreography?
+- ![img.png](img.png)
+- What is aggregation & composition in java? 
+- What is an anonymous inner class?
+- What is System class? 
+- What is a daemon thread, why it is used? 
+![img_1.png](img_1.png)
+- What is wrapper class? 
+![img_2.png](img_2.png)
+![img_3.png](img_3.png)
+![img_4.png](img_4.png)
+![img_5.png](img_5.png)
+- What is servlet? 
+- How do you monitor spring boot application? 
+- 
