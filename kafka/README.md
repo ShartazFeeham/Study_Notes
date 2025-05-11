@@ -263,3 +263,13 @@ This allows for efficient storage and the ability to rebuild state by replaying 
 - Is offset an integer? If yes than what is the maximum number of messages can be hold? What happen when the limit exceed? 
 - Is log compaction inconsistent? It is not inconsistent however it offers a different type of consistency. In case of systems that require immutable complete history then log compaction is not a good choice as it may remove intermediate states.
 In that case, time based retention is a better choice. However, for systems that require only the latest state, log compaction is a good choice.
+
+## Some case studies 
+
+## Kafka connect
+What is Kafka connect?
+Explain source and sync connector.
+What are the workers & tasks & how are the rebalanced for fault tolerance?
+What is the difference between standalone source and distributed source?
+What is Kafka connector REST API's?
+**SQL Selectron - for SQL DB UI**winget install --id Cloudflare.cloudflared
