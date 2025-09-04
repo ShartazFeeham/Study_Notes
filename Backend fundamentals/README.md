@@ -31,10 +31,11 @@ the server as it get too many requests from so many clients and most of them are
 
 ### Long polling
 The ultimate solution to short polling's too many message problem: the main difference in long polling is, if the 
-response is not ready the server don't return any response, goodbye to the "no" responses. Client only sends a new 
-request after a response is received or a timeout occurs. As a result the client don't keep sending status requests. 
+response is not ready the server don't return any response, goodbye to frequent "no" responses. Client only sends a new 
+request after a "yes" response is received or a timeout occurs. As a result the client don't keep sending status requests. 
 Once the response is ready it is returned. Good sides: its literally solves all issues. Bad sides: not very alive & 
 practically realtime but not theoretically, waiting timeouts & queues - saves time tradeoffs. Kafka use long polling.
+
 Two big questions: As the server holds the request so doesn't it cost extra space for that? 
 And what about timeout? Is it only from client side or from server side too? 
 Well there is no magic and the answers are negative as supposed to be! The server has timeouts after which it response
@@ -54,7 +55,7 @@ without a significant drain on server resources.
 #### How It Works ⚙️
 Kafka's solution is built on a fundamental shift from the traditional one-thread-per-connection model. 
 Here's a breakdown of the key components:
-- Non-Blocking I/O: Kafka's network layer is built on the Java NIO (New I/O) package. This allows a single thread to manage multiple socket connections. When a client sends a request, the broker doesn't block that thread while waiting for the response to be prepared. Instead, the thread is freed up to handle other connections. When the data is ready, the event is queued, and the thread can then asynchronously send the response back to the client. This is similar to how an event-loop works in Node.js. .
+- Non-Blocking I/O: Kafka's network layer is built on the Java NIO (New I/O) package. This allows a single thread to manage multiple socket connections. When a client sends a request, the broker doesn't block that thread while waiting for the response to be prepared. Instead, the thread is freed up to handle other connections. When the data is ready, the event is queued, and the thread can then asynchronously send the response back to the client.
 - Single-Threaded Request Handler: A typical Kafka broker has a small number of network threads (I/O threads) that listen for incoming requests from clients. When a request arrives (e.g., a fetch request using long polling), it's placed in a request queue. A separate, single-threaded request handler processes these requests. This handler doesn't dedicate a thread to the client's connection. Instead, it processes the request and, if the data isn't immediately available (the core of the long polling wait), it puts the request on a "purgatory" queue.
 - Purgatory Queue (Wait Queue): This is a crucial data structure for Kafka's long polling implementation. When a client's fetch request arrives and there's no new data available, Kafka doesn't hold the network thread. Instead, it places the request in the purgatory queue, where it "sleeps" without consuming any CPU cycles. Each request in the purgatory is associated with a timeout. As soon as new messages arrive for that topic-partition, Kafka awakens the relevant requests in the purgatory and moves them to a response queue to be processed and sent back to the client. Similarly, if the timeout expires, the request is also awakened and sent back to the client with an empty response.
 
