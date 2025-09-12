@@ -61,3 +61,33 @@ Here's a breakdown of the key components:
 
 By decoupling the network connection from the processing logic and using non-blocking I/O with a purgatory queue, Kafka effectively addresses the scalability challenges of long polling. It can maintain thousands of open, waiting connections without a significant resource penalty.
 
+### Server sent events
+It is just a single request and then a stream of unending responses from server. 
+Pros & cons are same has push. So what's the difference? 
+The main difference is that Server-Sent Events (SSE) are a unidirectional push model where the server sends updates to 
+the client. Clients do send an initial request to the server to establish the connection, but after that, 
+the communication is unidirectional. The client listens for events but can't send data back to the server in same connection. 
+In a general push model, communication can be bidirectional, allowing both the server to push data to the client and 
+the client to send data back to the server within the same connection.
+
+### Pub-sub
+What if a client want to talk to multiple server and a server want to serve multiple clients? A many-to-many (MESH) 
+scenario. Pub-sub! There is set a queue which is the resource core, multiple servers access and writes in it, 
+and multiple clients can read from it, a single end can act both as publisher and subscriber. These makes the model
+loose-coupled, very dynamic, great for microservices, parallel processing, separated of concerns, scaling, no-problem if
+offline but with a cost of complexity, network saturation & message delivery issues. 
+
+### Sidecar pattern
+The Sidecar Pattern is a microservices architecture design where a separate service, known as a sidecar, runs alongside 
+the main application. This setup helps by offloading auxiliary tasks such as logging and monitoring from the main service, 
+which allows it to focus on its core functionalities.
+Benefits and Integration
+Enhanced Maintainability and Scalability: By isolating auxiliary tasks, the sidecar pattern significantly boosts 
+the maintainability and scalability of the application.
+Technology Integration:
+Kubernetes: Integrates seamlessly for orchestration, assisting in managing containerized applications.
+Istio: Facilitates service meshes that help in promoting reusability and streamlined communication between services.
+Considerations
+Added Complexity: While beneficial, employing the sidecar pattern can introduce additional complexity.
+Resource Usage: It may increase resource usage, so it's vital to monitor resource allocation.
+Communication: Ensure clear communication channels between the main service and the sidecar to maintain efficient operation.
